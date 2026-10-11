@@ -1,0 +1,22 @@
+meta {
+  name: Jeden artykuł (documentId)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/articles/{{documentId}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}
+
+docs {
+  Do pojedynczego wpisu odwołujemy się przez `documentId`, nie numeryczne `id`.
+  Zmienną ustawia zapytanie „Lista artykułów”.
+}

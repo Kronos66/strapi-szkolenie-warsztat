@@ -1,0 +1,29 @@
+meta {
+  name: Utworzenie (403 dla Public)
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/articles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "data": {
+      "title": "Artykuł z API"
+    }
+  }
+}
+
+tests {
+  test("Status 403", function () {
+    expect(res.status).to.equal(403);
+  });
+}
+
+docs {
+  Rola Public nie ma uprawnienia `create` — oczekiwany wynik to 403. Zapis z tokenem: ćwiczenie P4.
+}

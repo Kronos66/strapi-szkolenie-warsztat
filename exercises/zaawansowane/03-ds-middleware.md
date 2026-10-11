@@ -59,8 +59,9 @@ if (data?.title && !data?.slug) {
 
 Podpowiedź — zamiana polskich znaków:
 ```ts
+.replace(/ł/g, 'l')        // ł nie rozkłada się w NFKD
 .normalize('NFKD')
-.replace(/[̀-ͯ]/g, '')
+.replace(/[\u0300-\u036f]/g, '')
 ```
 
 ### Krok 4 — Oblicz readTime

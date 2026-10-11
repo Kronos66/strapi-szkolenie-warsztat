@@ -1,0 +1,21 @@
+meta {
+  name: Najnowsze najpierw
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/articles?sort=publishedAt:desc
+  body: none
+  auth: none
+}
+
+params:query {
+  sort: publishedAt:desc
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}

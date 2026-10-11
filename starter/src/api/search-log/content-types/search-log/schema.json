@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "search_logs",
+  "info": {
+    "singularName": "search-log",
+    "pluralName": "search-logs",
+    "displayName": "Search Log"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": { "visible": false }
+  },
+  "attributes": {
+    "query": {
+      "type": "string"
+    },
+    "resultsCount": {
+      "type": "integer"
+    },
+    "locale": {
+      "type": "string"
+    }
+  }
+}

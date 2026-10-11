@@ -1,61 +1,85 @@
-# 🚀 Getting started with Strapi
+# Warsztaty Strapi 5 — od podstaw do zaawansowanych
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+Warsztaty online, prowadzone równolegle z prezentacją
+[strapi-prezentacja](https://github.com/Kronos66/strapi-prezentacja).
+Część podstawowa jest dla frontendowców bez doświadczenia backendowego,
+część zaawansowana — dla osób, które znają już podstawy Strapi.
 
-### `develop`
+## Wymagania
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
+- **Node.js 22+** (wersja LTS: 22, 24 lub 26) → `node -v`
+- **npm 6+** → `npm -v`
+- Edytor (np. VS Code)
+- **Postman** lub **Bruno** do testowania API
+- Podstawy JavaScriptu (async/await, JSON); w części zaawansowanej także TypeScript
+- Stabilne łącze, mikrofon i możliwość udostępniania ekranu — przy problemach pokażesz prowadzącemu swój terminal
+
+## Struktura
 
 ```
+strapi-workshop/
+├── exercises/
+│   ├── podstawy/        ← P1–P6: nowy projekt od zera (create-strapi)
+│   └── zaawansowane/    ← 01–04: praca na projekcie startowym
+├── solutions/           ← tylko w gałęzi `rozwiazania`
+│   └── zaawansowane/    ← gotowe rozwiązania ćwiczeń 01–04
+├── kolekcje-api/        ← kolekcje Postman i Bruno z zapytaniami z ćwiczenia P3
+├── starter/             ← projekt startowy Strapi 5.57 (Article, Author, Category, Search Log…)
+└── PROWADZACY.md        ← notatki dla prowadzącego (tylko w gałęzi `rozwiazania`)
+```
+
+## Gałęzie
+
+- **`main`** — materiały dla uczestników: ćwiczenia, projekt startowy, kolekcje API
+- **`rozwiazania`** — to samo plus gotowe rozwiązania (`solutions/`) i notatki prowadzącego
+
+## Część podstawowa
+
+Każdy uczestnik tworzy własny projekt od zera.
+
+| # | Ćwiczenie | Temat |
+|---|-----------|-------|
+| P1 | [Instalacja i panel admina](./exercises/podstawy/01-instalacja.md) | create-strapi · struktura projektu · panel admina |
+| P2 | [Content Types i relacje](./exercises/podstawy/02-content-types.md) | Content-Type Builder · pola · relacje 1:1 / 1:N / N:M |
+| P3 | [REST API](./exercises/podstawy/03-rest-api.md) | Endpointy · populate · filters · sort · pagination |
+| P4 | [Uprawnienia i API Tokens](./exercises/podstawy/04-uprawnienia-i-tokeny.md) | Role Public / Authenticated · API Tokens |
+| P5 | [Biblioteka mediów](./exercises/podstawy/05-media.md) | Upload · formaty obrazków · URL w API |
+| P6 | [Blog API od A do Z](./exercises/podstawy/06-blog-api.md) | Zadanie finałowe — wszystko razem |
+
+## Część zaawansowana
+
+Pracujemy na projekcie startowym:
+
+```bash
+cd starter
+cp .env.example .env    # bez pliku .env Strapi nie wystartuje
+npm install
 npm run develop
-# or
-yarn develop
 ```
 
-### `start`
+Szczegóły: [exercises/zaawansowane/README.md](./exercises/zaawansowane/README.md).
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
+| # | Ćwiczenie | Temat |
+|---|-----------|-------|
+| 01 | [Search Endpoint](./exercises/zaawansowane/01-search-endpoint.md) | Kontroler · Serwis · Trasy |
+| 02 | [Policy: is-owner](./exercises/zaawansowane/02-policy-is-owner.md) | Polityki autoryzacji |
+| 03 | [DS Middleware](./exercises/zaawansowane/03-ds-middleware.md) | Document Service middleware |
+| 04 | [Activity Log Plugin](./exercises/zaawansowane/04-activity-log-plugin.md) | Plugin z admin UI |
 
-```
-npm run start
-# or
-yarn start
-```
+## Co dalej
 
-### `build`
+| Funkcja | Jak zacząć |
+|---|---|
+| **Uwierzytelnianie** | Wbudowane — `POST /api/auth/local/register` i `POST /api/auth/local` |
+| **GraphQL** | `npm install @strapi/plugin-graphql` — endpoint `/graphql` |
+| **i18n** | Wbudowane w Strapi 5 — Settings → Internationalization |
+| **Webhooks** | Settings → Webhooks — powiadamianie zewnętrznych serwisów o zmianach treści |
+| **Strapi Cloud** | Zarządzany hosting — `npm run deploy` |
 
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
+## Zasoby
 
-```
-npm run build
-# or
-yarn build
-```
-
-## ⚙️ Deployment
-
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
-```
-yarn strapi deploy
-```
-
-## 📚 Learn more
-
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
-
----
-
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+- Dokumentacja: [docs.strapi.io](https://docs.strapi.io)
+- REST API: [docs.strapi.io/cms/api/rest](https://docs.strapi.io/cms/api/rest)
+- Document Service API: [docs.strapi.io/cms/api/document-service](https://docs.strapi.io/cms/api/document-service)
+- Discord: [discord.strapi.io](https://discord.strapi.io) · Forum: [forum.strapi.io](https://forum.strapi.io)
+- GitHub: [github.com/strapi/strapi](https://github.com/strapi/strapi)

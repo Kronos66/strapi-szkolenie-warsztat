@@ -1,0 +1,27 @@
+meta {
+  name: Lista artykułów
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/articles
+  body: none
+  auth: none
+}
+
+vars:post-response {
+  documentId: res.body.data[0].documentId
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}
+
+docs {
+  Pierwsze wywołanie zwraca 403 — Strapi domyślnie blokuje wszystko.
+  Po włączeniu `find` i `findOne` dla roli Public (krok 2) zwraca listę.
+  Zapisuje `documentId` pierwszego artykułu do zmiennej `documentId`.
+}

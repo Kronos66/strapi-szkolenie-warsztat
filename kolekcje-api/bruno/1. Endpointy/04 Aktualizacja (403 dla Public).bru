@@ -1,0 +1,29 @@
+meta {
+  name: Aktualizacja (403 dla Public)
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/articles/{{documentId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "data": {
+      "title": "Zmieniony tytuł"
+    }
+  }
+}
+
+tests {
+  test("Status 403", function () {
+    expect(res.status).to.equal(403);
+  });
+}
+
+docs {
+  Oczekiwany wynik: 403.
+}

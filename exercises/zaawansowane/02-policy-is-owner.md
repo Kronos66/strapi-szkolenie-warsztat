@@ -12,7 +12,7 @@ Nieautoryzowane próby powinny zwracać `403 Forbidden`.
 ```
 src/api/article/
 ├── policies/is-owner.ts     ← utwórz nowy plik
-└── routes/custom-article.ts ← dodaj trasę DELETE z polityką
+└── routes/01-custom-article.ts ← dodaj trasę DELETE z polityką
 ```
 
 ## Kroki
@@ -31,7 +31,7 @@ Logika:
 2. Jeśli brak `user` — rzuć `errors.ForbiddenError`
 3. Pobierz artykuł przez `strapi.documents('api::article.article').findOne(id, { populate: { author: { fields: ['id'] } } })`
 4. Jeśli brak artykułu — rzuć `errors.NotFoundError`
-5. Sprawdź: `article.author?.id === user.id` (właściciel) lub `user.roles?.some(r => r.name === 'Editor')` (editor)
+5. Sprawdź: `article.author?.id === user.id` (właściciel) lub `user.role?.name === 'Editor'` (editor — użytkownik users-permissions ma jedną rolę)
 6. Jeśli żaden warunek — rzuć `errors.ForbiddenError`
 7. W przeciwnym razie — `return true`
 
@@ -42,7 +42,7 @@ import { errors } from '@strapi/utils';
 
 ### Krok 2 — Zarejestruj politykę w trasie
 
-W pliku `src/api/article/routes/custom-article.ts` (z ćwiczenia 01 lub nowy plik)
+W pliku `src/api/article/routes/01-custom-article.ts` (z ćwiczenia 01 lub nowy plik)
 dodaj trasę `DELETE`:
 
 ```ts
@@ -56,7 +56,7 @@ dodaj trasę `DELETE`:
 },
 ```
 
-**Uwaga:** Jeśli jeszcze nie masz pliku `custom-article.ts`, utwórz go.
+**Uwaga:** Jeśli jeszcze nie masz pliku `01-custom-article.ts`, utwórz go.
 Jeśli już istnieje z ćwiczenia 01 — dodaj tylko nową trasę do tablicy `routes`.
 
 ## Kryteria akceptacji

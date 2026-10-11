@@ -1,0 +1,24 @@
+meta {
+  name: populate + filters + sort + pagination
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/articles?populate=author&filters[title][$containsi]=blog&sort=publishedAt:desc&pagination[pageSize]=3
+  body: none
+  auth: none
+}
+
+params:query {
+  populate: author
+  filters[title][$containsi]: blog
+  sort: publishedAt:desc
+  pagination[pageSize]: 3
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}

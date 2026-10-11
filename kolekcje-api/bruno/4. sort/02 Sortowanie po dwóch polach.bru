@@ -1,0 +1,22 @@
+meta {
+  name: Sortowanie po dwóch polach
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/articles?sort[0]=publishedAt:desc&sort[1]=title:asc
+  body: none
+  auth: none
+}
+
+params:query {
+  sort[0]: publishedAt:desc
+  sort[1]: title:asc
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}

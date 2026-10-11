@@ -1,0 +1,25 @@
+meta {
+  name: Opublikowane od 2026-01-01
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/articles?filters[publishedAt][$gte]=2026-01-01
+  body: none
+  auth: none
+}
+
+params:query {
+  filters[publishedAt][$gte]: 2026-01-01
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}
+
+docs {
+  Filtrowanie po dacie.
+}

@@ -1,0 +1,25 @@
+meta {
+  name: populate=* (wszystkie relacje)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/articles?populate=*
+  body: none
+  auth: none
+}
+
+params:query {
+  populate: *
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}
+
+docs {
+  Wszystkie relacje pierwszego poziomu.
+}

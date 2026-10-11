@@ -15,7 +15,7 @@ Zbuduj endpoint `GET /api/articles/search?q=<fraza>`, który:
 src/api/article/
 ├── services/article.ts      ← dodaj metodę search()
 ├── controllers/article.ts   ← dodaj akcję search()
-└── routes/custom-article.ts ← utwórz nowy plik z trasą
+└── routes/01-custom-article.ts ← utwórz nowy plik z trasą
 ```
 
 ## Kroki
@@ -49,7 +49,10 @@ Logika:
 
 ### Krok 3 — Trasa
 
-Utwórz plik `src/api/article/routes/custom-article.ts`:
+Utwórz plik `src/api/article/routes/01-custom-article.ts`:
+
+> **Dlaczego prefiks `01-`?** Strapi ładuje pliki tras alfabetycznie. Bez prefiksu plik załadowałby się
+> po `article.ts`, a `GET /articles/search` trafiłby w trasę `GET /articles/:id` (findOne) z id = `search`.
 
 ```ts
 export default {

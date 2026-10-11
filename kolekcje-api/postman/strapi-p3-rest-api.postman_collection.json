@@ -1,0 +1,602 @@
+{
+  "info": {
+    "name": "Strapi 5 — ćwiczenie P3 (REST API)",
+    "description": "Zapytania z ćwiczenia P3 (`exercises/podstawy/03-rest-api.md`). Zmienne kolekcji: `baseUrl`, `documentId` (ustawiana automatycznie), `authorName`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Endpointy",
+      "item": [
+        {
+          "name": "Lista artykułów",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const first = pm.response.json().data?.[0];",
+                  "if (first) pm.collectionVariables.set('documentId', first.documentId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ]
+            },
+            "description": "Pierwsze wywołanie zwraca 403 — Strapi domyślnie blokuje wszystko.\nPo włączeniu `find` i `findOne` dla roli Public (krok 2) zwraca listę.\nZapisuje `documentId` pierwszego artykułu do zmiennej `documentId`."
+          }
+        },
+        {
+          "name": "Jeden artykuł (documentId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles/{{documentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles",
+                "{{documentId}}"
+              ]
+            },
+            "description": "Do pojedynczego wpisu odwołujemy się przez `documentId`, nie numeryczne `id`.\nZmienną ustawia zapytanie „Lista artykułów”."
+          }
+        },
+        {
+          "name": "Utworzenie (403 dla Public)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ]
+            },
+            "description": "Rola Public nie ma uprawnienia `create` — oczekiwany wynik to 403. Zapis z tokenem: ćwiczenie P4.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"title\": \"Artykuł z API\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Aktualizacja (403 dla Public)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles/{{documentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles",
+                "{{documentId}}"
+              ]
+            },
+            "description": "Oczekiwany wynik: 403.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"title\": \"Zmieniony tytuł\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Usunięcie (403 dla Public)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles/{{documentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles",
+                "{{documentId}}"
+              ]
+            },
+            "description": "Oczekiwany wynik: 403."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. populate",
+      "item": [
+        {
+          "name": "populate=author",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles?populate=author",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "populate",
+                  "value": "author"
+                }
+              ]
+            },
+            "description": "Dołącza relację `author` — bez `populate` pola `author` nie ma w odpowiedzi."
+          }
+        },
+        {
+          "name": "populate zagnieżdżone (avatar autora)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles?populate[author][populate]=avatar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "populate[author][populate]",
+                  "value": "avatar"
+                }
+              ]
+            },
+            "description": "Autor razem z jego avatarem."
+          }
+        },
+        {
+          "name": "populate=* (wszystkie relacje)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles?populate=*",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "populate",
+                  "value": "*"
+                }
+              ]
+            },
+            "description": "Wszystkie relacje pierwszego poziomu."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. filters",
+      "item": [
+        {
+          "name": "Tytuł zawiera „strapi”",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles?filters[title][$containsi]=strapi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "filters[title][$containsi]",
+                  "value": "strapi"
+                }
+              ]
+            },
+            "description": "`$containsi` — bez rozróżniania wielkości liter.\nOperatory: `$eq`, `$ne`, `$contains`, `$containsi`, `$gt`, `$gte`, `$lt`, `$lte`, `$in`, `$null`."
+          }
+        },
+        {
+          "name": "Opublikowane od 2026-01-01",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles?filters[publishedAt][$gte]=2026-01-01",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "filters[publishedAt][$gte]",
+                  "value": "2026-01-01"
+                }
+              ]
+            },
+            "description": "Filtrowanie po dacie."
+          }
+        },
+        {
+          "name": "Zadanie — artykuły autora",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles?filters[author][name][$eq]={{authorName}}&populate=author",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "filters[author][name][$eq]",
+                  "value": "{{authorName}}"
+                },
+                {
+                  "key": "populate",
+                  "value": "author"
+                }
+              ]
+            },
+            "description": "Filtr po polu relacji. Ustaw zmienną `authorName` na imię jednego z Twoich autorów."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. sort",
+      "item": [
+        {
+          "name": "Najnowsze najpierw",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles?sort=publishedAt:desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "publishedAt:desc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sortowanie po dwóch polach",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles?sort[0]=publishedAt:desc&sort[1]=title:asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "sort[0]",
+                  "value": "publishedAt:desc"
+                },
+                {
+                  "key": "sort[1]",
+                  "value": "title:asc"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. pagination",
+      "item": [
+        {
+          "name": "Strona 1, 5 wyników",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles?pagination[page]=1&pagination[pageSize]=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "pagination[page]",
+                  "value": "1"
+                },
+                {
+                  "key": "pagination[pageSize]",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Szczegóły stronicowania w `meta.pagination`."
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Wszystko razem",
+      "item": [
+        {
+          "name": "populate + filters + sort + pagination",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles?populate=author&filters[title][$containsi]=blog&sort=publishedAt:desc&pagination[pageSize]=3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "populate",
+                  "value": "author"
+                },
+                {
+                  "key": "filters[title][$containsi]",
+                  "value": "blog"
+                },
+                {
+                  "key": "sort",
+                  "value": "publishedAt:desc"
+                },
+                {
+                  "key": "pagination[pageSize]",
+                  "value": "3"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:1337"
+    },
+    {
+      "key": "documentId",
+      "value": ""
+    },
+    {
+      "key": "authorName",
+      "value": "Jan Kowalski"
+    }
+  ]
+}

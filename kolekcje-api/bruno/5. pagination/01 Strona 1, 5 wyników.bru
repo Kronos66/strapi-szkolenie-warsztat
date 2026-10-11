@@ -1,0 +1,26 @@
+meta {
+  name: Strona 1, 5 wyników
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/articles?pagination[page]=1&pagination[pageSize]=5
+  body: none
+  auth: none
+}
+
+params:query {
+  pagination[page]: 1
+  pagination[pageSize]: 5
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}
+
+docs {
+  Szczegóły stronicowania w `meta.pagination`.
+}

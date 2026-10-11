@@ -1,0 +1,21 @@
+meta {
+  name: Usunięcie (403 dla Public)
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/api/articles/{{documentId}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status 403", function () {
+    expect(res.status).to.equal(403);
+  });
+}
+
+docs {
+  Oczekiwany wynik: 403.
+}

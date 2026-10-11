@@ -1,9 +1,10 @@
-# Warsztaty Strapi v5 — Ćwiczenia
+# Warsztaty Strapi 5 — część zaawansowana
 
 ## Konfiguracja środowiska
 
 ```bash
-cd workshop/starter
+cd starter
+cp .env.example .env    # bez pliku .env Strapi nie wystartuje
 npm install
 npm run develop
 ```
@@ -27,14 +28,15 @@ Starter zawiera gotowy projekt z content types:
 - **Author** — autorzy artykułów
 - **Category** — kategorie
 - **Global** / **About** — strony jednorazowe
-- **Search Log** — prerekvizyt do ćwiczenia 01 (automatycznie dostępny)
+- **Search Log** — potrzebny w ćwiczeniu 01 (automatycznie dostępny)
 
 ## Rozwiązania
 
-Gotowe implementacje każdego ćwiczenia znajdziesz w `workshop/solutions/`:
+Gotowe implementacje każdego ćwiczenia są w gałęzi `rozwiazania`, w katalogu `solutions/zaawansowane/`
+(`git checkout rozwiazania`). Zajrzyj tam dopiero po własnej próbie:
 
 ```
-solutions/
+solutions/zaawansowane/
 ├── 01-search-endpoint/src/api/article/
 ├── 02-policy-is-owner/src/api/article/
 ├── 03-ds-middleware/src/

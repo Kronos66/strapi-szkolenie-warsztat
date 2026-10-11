@@ -1,0 +1,25 @@
+meta {
+  name: populate zagnieżdżone (avatar autora)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/articles?populate[author][populate]=avatar
+  body: none
+  auth: none
+}
+
+params:query {
+  populate[author][populate]: avatar
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}
+
+docs {
+  Autor razem z jego avatarem.
+}

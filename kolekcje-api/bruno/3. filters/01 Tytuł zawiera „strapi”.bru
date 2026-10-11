@@ -1,0 +1,26 @@
+meta {
+  name: Tytuł zawiera „strapi”
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/articles?filters[title][$containsi]=strapi
+  body: none
+  auth: none
+}
+
+params:query {
+  filters[title][$containsi]: strapi
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}
+
+docs {
+  `$containsi` — bez rozróżniania wielkości liter.
+  Operatory: `$eq`, `$ne`, `$contains`, `$containsi`, `$gt`, `$gte`, `$lt`, `$lte`, `$in`, `$null`.
+}

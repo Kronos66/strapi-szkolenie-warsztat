@@ -1,0 +1,26 @@
+meta {
+  name: Zadanie — artykuły autora
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/articles?filters[author][name][$eq]={{authorName}}&populate=author
+  body: none
+  auth: none
+}
+
+params:query {
+  filters[author][name][$eq]: {{authorName}}
+  populate: author
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}
+
+docs {
+  Filtr po polu relacji. Ustaw zmienną `authorName` na imię jednego z Twoich autorów.
+}

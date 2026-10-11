@@ -1,0 +1,25 @@
+meta {
+  name: populate=author
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/articles?populate=author
+  body: none
+  auth: none
+}
+
+params:query {
+  populate: author
+}
+
+tests {
+  test("Status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+}
+
+docs {
+  Dołącza relację `author` — bez `populate` pola `author` nie ma w odpowiedzi.
+}
