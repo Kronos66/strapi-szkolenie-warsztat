@@ -1,7 +1,7 @@
 # Warsztaty Strapi 5 — od podstaw do zaawansowanych
 
 Warsztaty online, prowadzone równolegle z prezentacją
-[strapi-prezentacja](https://github.com/Kronos66/strapi-prezentacja).
+[strapi-szkolenie-prezentacja](https://github.com/Kronos66/strapi-szkolenie-prezentacja).
 Część podstawowa jest dla frontendowców bez doświadczenia backendowego,
 część zaawansowana — dla osób, które znają już podstawy Strapi.
 
@@ -17,7 +17,7 @@ część zaawansowana — dla osób, które znają już podstawy Strapi.
 ## Struktura
 
 ```
-strapi-workshop/
+strapi-szkolenie-warsztat/
 ├── exercises/
 │   ├── podstawy/        ← P1–P6: nowy projekt od zera (create-strapi)
 │   └── zaawansowane/    ← 01–04: praca na projekcie startowym
