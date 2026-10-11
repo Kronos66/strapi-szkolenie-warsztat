@@ -3,6 +3,7 @@
 ## Cel
 
 Zbuduj endpoint `GET /api/articles/search?q=<fraza>`, który:
+
 - Przeszukuje artykuły po polach `title` i `body` (case-insensitive)
 - Zwraca tylko opublikowane artykuły z polami `title`, `slug`, `publishedAt`
 - Obsługuje parametr `locale` (domyślnie `pl`)
@@ -26,13 +27,14 @@ Edytuj `src/api/article/services/article.ts`. Rozszerz serwis bazowy
 o metodę `search`, która przyjmuje `query: string` i opcjonalny `locale`.
 
 Logika:
+
 1. Jeśli `query` ma mniej niż 2 znaki — zwróć pustą tablicę
 2. Wywołaj `strapi.documents('api::article.article').findMany()` z:
-   - `status: 'published'`
-   - `locale` przekazanym jako parametr
-   - `filters: { $or: [{ title: { $containsi: query } }, { body: { $containsi: query } }] }`
-   - `fields: ['title', 'slug', 'publishedAt']`
-   - `sort: 'publishedAt:desc'`
+    - `status: 'published'`
+    - `locale` przekazanym jako parametr
+    - `filters: { $or: [{ title: { $containsi: query } }, { body: { $containsi: query } }] }`
+    - `fields: ['title', 'slug', 'publishedAt']`
+    - `sort: 'publishedAt:desc'`
 3. Zapisz wpis do `search-log` przez `strapi.documents('api::search-log.search-log').create()`
 4. Zwróć wyniki
 
@@ -42,6 +44,7 @@ Edytuj `src/api/article/controllers/article.ts`. Rozszerz kontroler bazowy
 o akcję `search`.
 
 Logika:
+
 1. Pobierz `q` i `locale` z `ctx.query`
 2. Jeśli brak `q` — zwróć `ctx.badRequest('Parametr "q" jest wymagany')`
 3. Wywołaj `strapi.service('api::article.article').search(q, locale)`
@@ -51,8 +54,10 @@ Logika:
 
 Utwórz plik `src/api/article/routes/01-custom-article.ts`:
 
-> **Dlaczego prefiks `01-`?** Strapi ładuje pliki tras alfabetycznie. Bez prefiksu plik załadowałby się
-> po `article.ts`, a `GET /articles/search` trafiłby w trasę `GET /articles/:id` (findOne) z id = `search`.
+> **Dlaczego prefiks `01-`?** Strapi ładuje pliki tras alfabetycznie. Bez prefiksu plik załadowałby
+> się
+> po `article.ts`, a `GET /articles/search` trafiłby w trasę `GET /articles/:id` (findOne) z id =
+> `search`.
 
 ```ts
 export default {
@@ -87,14 +92,16 @@ GET http://localhost:1337/api/articles/search?q=a
 # → { data: [] }
 ```
 
-Sprawdź też w panelu admina, że kolekcja **Search Log** rejestruje wyszukiwania
-(Settings → Content-Manager lub przez API `/api/search-logs` z tokenem admina).
+Sprawdź też w panelu admina, że kolekcja **Search Log** rejestruje wyszukiwania (Settings →
+Content-Manager lub przez API `/api/search-logs` z tokenem admina).
 
 ## Wskazówki
 
-- `$containsi` to operator case-insensitive. Bez `i` (`$contains`) wyszukiwanie jest wrażliwe na wielkość liter.
+- `$containsi` to operator case-insensitive. Bez `i` (`$contains`) wyszukiwanie jest wrażliwe na
+  wielkość liter.
 - `fields` ogranicza pola w odpowiedzi — bez tego Strapi zwróci wszystkie pola dokumentu.
-- Metoda `search()` w serwisie nie powinna nic wiedzieć o HTTP (`ctx`). Logika walidacji `q` jest w kontrolerze.
+- Metoda `search()` w serwisie nie powinna nic wiedzieć o HTTP (`ctx`). Logika walidacji `q` jest w
+  kontrolerze.
 - Jeśli `search-log` nie rejestruje wpisów — sprawdź czy `draftAndPublish: false` w jego schemacie.
 
 ## Dodatkowe zasoby

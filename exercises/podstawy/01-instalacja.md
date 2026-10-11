@@ -15,7 +15,8 @@ cd my-blog
 npm run develop
 ```
 
-- `--non-interactive` przyjmuje ustawienia domyślne: TypeScript i **SQLite** — nie trzeba stawiać bazy danych
+- `--non-interactive` przyjmuje ustawienia domyślne: TypeScript i **SQLite** — nie trzeba stawiać
+  bazy danych
 - `--skip-cloud` pomija logowanie do Strapi Cloud
 - Panel admina otworzy się pod `http://localhost:1337/admin` — utwórz konto administratora
 
@@ -46,12 +47,12 @@ Warto jednak wiedzieć, gdzie co leży, kiedy przyjdzie czas na customizację.
 
 Przejdź po kolei przez sekcje w bocznym menu:
 
-| Sekcja | Do czego służy |
-|---|---|
-| **Content Manager** | Tworzenie, edycja i publikacja wpisów. Wpisy mają stan Draft lub Published (Draft & Publish) |
+| Sekcja                   | Do czego służy                                                                                                               |
+|--------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| **Content Manager**      | Tworzenie, edycja i publikacja wpisów. Wpisy mają stan Draft lub Published (Draft & Publish)                                 |
 | **Content-Type Builder** | Definiowanie kształtu danych — pola, typy, relacje. Zmiany aktualizują schemat bazy i API. Dostępny tylko w trybie `develop` |
-| **Media Library** | Centralne miejsce na pliki. Strapi generuje kilka rozmiarów obrazków |
-| **Settings** | Role i uprawnienia, API Tokens, Internationalization (i18n jest wbudowane w Strapi 5) |
+| **Media Library**        | Centralne miejsce na pliki. Strapi generuje kilka rozmiarów obrazków                                                         |
+| **Settings**             | Role i uprawnienia, API Tokens, Internationalization (i18n jest wbudowane w Strapi 5)                                        |
 
 ## Kryteria akceptacji
 

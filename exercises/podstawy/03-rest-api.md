@@ -14,13 +14,13 @@ i najważniejsze parametry zapytań.
 
 Każdy Collection Type dostaje automatycznie:
 
-| Akcja | Metoda | URL |
-|---|---|---|
-| Lista | `GET` | `/api/articles` |
-| Jeden wpis | `GET` | `/api/articles/:documentId` |
-| Utworzenie | `POST` | `/api/articles` |
-| Aktualizacja | `PUT` | `/api/articles/:documentId` |
-| Usunięcie | `DELETE` | `/api/articles/:documentId` |
+| Akcja        | Metoda   | URL                         |
+|--------------|----------|-----------------------------|
+| Lista        | `GET`    | `/api/articles`             |
+| Jeden wpis   | `GET`    | `/api/articles/:documentId` |
+| Utworzenie   | `POST`   | `/api/articles`             |
+| Aktualizacja | `PUT`    | `/api/articles/:documentId` |
+| Usunięcie    | `DELETE` | `/api/articles/:documentId` |
 
 Wyślij `GET http://localhost:1337/api/articles`.
 
@@ -34,7 +34,8 @@ dla **Article** i **Author** → **Save**.
 Powtórz zapytanie — teraz dostajesz JSON. (Uprawnienia omawiamy dokładnie w ćwiczeniu P4.)
 
 > **Dlaczego także Author?** Uprawnienia działają też na relacjach. Bez dostępu do Author
-> `populate=author` po cichu pomija autora, a filtr `filters[author][...]` zwraca **400 Invalid key author**.
+> `populate=author` po cichu pomija autora, a filtr `filters[author][...]` zwraca **400 Invalid key
+author**.
 
 ### Krok 3 — Kształt odpowiedzi
 
@@ -52,12 +53,18 @@ Powtórz zapytanie — teraz dostajesz JSON. (Uprawnienia omawiamy dokładnie w 
     }
   ],
   "meta": {
-    "pagination": { "page": 1, "pageSize": 25, "pageCount": 1, "total": 2 }
+    "pagination": {
+      "page": 1,
+      "pageSize": 25,
+      "pageCount": 1,
+      "total": 2
+    }
   }
 }
 ```
 
 Zwróć uwagę:
+
 - odpowiedź jest płaska — pola są bezpośrednio w obiekcie (w Strapi 4 były w `attributes`)
 - do pojedynczego wpisu odwołujesz się przez `documentId`, nie przez `id`
 - pola `author` nie ma — relacje nie są zwracane domyślnie
@@ -65,6 +72,7 @@ Zwróć uwagę:
 ### Krok 4 — Cztery najważniejsze parametry
 
 **`populate` — dołącz relacje**
+
 ```
 GET /api/articles?populate=author
 GET /api/articles?populate[author][populate]=avatar   ← zagnieżdżone
@@ -72,6 +80,7 @@ GET /api/articles?populate=*                          ← wszystkie relacje pier
 ```
 
 **`filters` — filtrowanie po wartości pola**
+
 ```
 GET /api/articles?filters[title][$containsi]=strapi
 GET /api/articles?filters[publishedAt][$gte]=2026-01-01
@@ -80,17 +89,20 @@ GET /api/articles?filters[publishedAt][$gte]=2026-01-01
 Operatory: `$eq`, `$ne`, `$contains`, `$containsi`, `$gt`, `$gte`, `$lt`, `$lte`, `$in`, `$null`
 
 **`sort` — sortowanie**
+
 ```
 GET /api/articles?sort=publishedAt:desc
 GET /api/articles?sort[0]=publishedAt:desc&sort[1]=title:asc
 ```
 
 **`pagination` — stronicowanie**
+
 ```
 GET /api/articles?pagination[page]=1&pagination[pageSize]=5
 ```
 
 **Wszystko razem:**
+
 ```
 GET /api/articles?populate=author&filters[title][$containsi]=blog&sort=publishedAt:desc&pagination[pageSize]=3
 ```

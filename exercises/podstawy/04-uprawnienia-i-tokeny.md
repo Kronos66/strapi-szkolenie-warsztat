@@ -8,9 +8,9 @@ Zrozum model uprawnień i skonfiguruj go poprawnie dla typowego bloga.
 
 ### Krok 1 — Dwie domyślne role
 
-| Rola | Kto | Zastosowanie |
-|---|---|---|
-| **Public** | Żądania bez tokenu | Publiczny odczyt opublikowanych artykułów |
+| Rola              | Kto                              | Zastosowanie                                          |
+|-------------------|----------------------------------|-------------------------------------------------------|
+| **Public**        | Żądania bez tokenu               | Publiczny odczyt opublikowanych artykułów             |
 | **Authenticated** | Żądania z ważnym JWT użytkownika | Zalogowani użytkownicy tworzą i edytują własne treści |
 
 Settings → Users & Permissions Plugin → Roles — obejrzyj obie role.
@@ -18,10 +18,12 @@ Settings → Users & Permissions Plugin → Roles — obejrzyj obie role.
 ### Krok 2 — Uprawnienia roli Public
 
 Public → **Article**:
+
 - ✅ `find`, `findOne`
 - ❌ `create`, `update`, `delete` — nigdy publicznie!
 
 Public → **Author**:
+
 - ✅ `find`, `findOne`
 
 > **Zasada:** Public = tylko odczyt. Operacje zapisu nigdy nie są publiczne.
@@ -32,6 +34,7 @@ JWT (z logowania) uwierzytelnia *użytkownika*. API Token uwierzytelnia *aplikac
 np. frontend w Next.js, który odpytuje Strapi.
 
 Settings → API Tokens → **Create new API Token**:
+
 - Name: `frontend-read`
 - Token type: **Read-only**
 - Token duration: Unlimited (albo z datą wygaśnięcia)

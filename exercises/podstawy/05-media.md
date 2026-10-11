@@ -15,7 +15,8 @@ zależnie od wielkości oryginału). Oryginał też zostaje.
 
 ### Krok 2 — Podepnij obrazek do artykułu
 
-Content Manager → otwórz artykuł → pole `coverImage` → wybierz plik z Media Library → **Save** i **Publish**.
+Content Manager → otwórz artykuł → pole `coverImage` → wybierz plik z Media Library → **Save** i
+**Publish**.
 
 ### Krok 3 — URL obrazka w API
 
@@ -31,8 +32,12 @@ Fragment odpowiedzi:
 "coverImage": {
   "url": "/uploads/my_image_abc123.jpg",
   "formats": {
-    "thumbnail": { "url": "/uploads/thumbnail_my_image_abc123.jpg" },
-    "small": { "url": "/uploads/small_my_image_abc123.jpg" }
+    "thumbnail": {
+      "url": "/uploads/thumbnail_my_image_abc123.jpg"
+    },
+    "small": {
+      "url": "/uploads/small_my_image_abc123.jpg"
+    }
   }
 }
 ```
