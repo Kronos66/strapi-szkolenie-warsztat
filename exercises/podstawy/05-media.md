@@ -8,7 +8,11 @@ Wgraj obrazki, podepnij je do treści i odczytaj ich URL w API.
 
 ### Krok 1 — Wgraj obrazki
 
-Media Library → **Add new assets** → przeciągnij 2–3 obrazki.
+Media Library → **New** → **Upload file** → wybierz 2–3 obrazki.
+
+> Od Strapi 5.54 Media Library ma nowy interfejs. Z tego samego menu **New** utworzysz też folder
+> (**New folder**) — foldery widać w drzewie po lewej. Upload działa w tle, więc możesz w tym czasie
+> przejść w inne miejsce panelu.
 
 Strapi generuje automatycznie dodatkowe rozmiary obrazka (`thumbnail`, `small`, `medium`, `large` —
 zależnie od wielkości oryginału). Oryginał też zostaje.
