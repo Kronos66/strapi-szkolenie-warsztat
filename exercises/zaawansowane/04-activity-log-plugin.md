@@ -9,21 +9,30 @@ Zbuduj lokalny plugin `activity-log` w TypeScripcie, który:
 
 ## Jak działa lokalny plugin w TypeScripcie
 
-Projekt Strapi **nie kompiluje** katalogu `src/plugins/` (jest wykluczony w `tsconfig.json`).
-Plugin to osobny pakiet z własnym `package.json` — budujesz go sam, a Strapi ładuje gotowy kod z `dist/`:
+Plugin kompiluje się **razem z aplikacją** — `npm run build` / `npm run develop` w `starter/`
+wystarczą, bez osobnego builda pluginu. Strapi szuka w katalogu pluginu dwóch plików wejściowych:
 
 ```
 src/plugins/activity-log/
-├── package.json        ← exports: ./strapi-server → dist/server, ./strapi-admin → dist/admin
+├── package.json        ← tylko nazwa i "strapi": { "kind": "plugin" }
+├── strapi-server.js    ← require('…/dist/src/plugins/activity-log/server/src') — kod skompilowany przez tsc projektu
+├── strapi-admin.js     ← export { default } from './admin/src' — Vite kompiluje TS panelu w locie
 ├── server/src/         ← kod serwera (TS)
-├── admin/src/          ← admin UI (React + TS)
-└── dist/               ← wynik `npm run build` — to ładuje Strapi
+└── admin/src/          ← admin UI (React + TS)
 ```
+
+Domyślnie `tsconfig.json` projektu wyklucza `src/plugins/**`, więc trzeba to zmienić (krok 1).
+
+> To skrót dla pluginów lokalnych. Plugin, który chcesz opublikować na npm, buduje się osobno
+> przez [Plugin SDK](https://docs.strapi.io/cms/plugins-development/create-a-plugin) (`@strapi/sdk-plugin`).
 
 ## Struktura pluginu
 
 ```
 src/plugins/activity-log/
+├── package.json
+├── strapi-server.js                     ← wejście serwera → dist/
+├── strapi-admin.js                      ← wejście panelu admina → admin/src
 ├── server/src/
 │   ├── index.ts                         ← punkt wejścia serwera
 │   ├── register.ts                      ← Document Service middleware
@@ -35,23 +44,67 @@ src/plugins/activity-log/
 │   └── routes/admin/index.ts            ← trasa admin GET /activity-log/logs
 └── admin/src/
     ├── index.ts                         ← rejestracja w menu admina
-    └── pages/HomePage.tsx               ← strona z tabelą logów
+    └── pages/
+        ├── App.tsx                      ← routing strony pluginu
+        └── HomePage.tsx                 ← strona z tabelą logów
 ```
 
 ## Kroki
 
-### Krok 1 — Wygeneruj plugin
+### Krok 1 — Szkielet pluginu
 
-```bash
-cd starter
-npx @strapi/sdk-plugin@latest init src/plugins/activity-log
+W `starter/tsconfig.json` zamień w `exclude` wpis `"src/plugins/**"` na:
+
+```jsonc
+// Panel admina pluginów buduje Vite (strapi-admin.js), serwer pluginów kompiluje tsc projektu
+"src/plugins/*/admin/**"
 ```
 
-Kreator zapyta m.in. o TypeScript (`tak`) oraz czy plugin ma część admin i server (`tak` dla obu).
-Usuń przykładowy kontroler, serwis i trasę `content-api` — zastąpisz je własnymi.
+Utwórz katalog `starter/src/plugins/activity-log/` i trzy pliki:
 
-> W `package.json` pluginu skrypty `test:ts:front` / `test:ts:back` uruchamiają `tsc` bez `--noEmit`
-> i zostawiają pliki `.js` obok `.ts`, co psuje build. Dopisz `--noEmit` albo ich nie uruchamiaj.
+`package.json`:
+
+```json
+{
+  "name": "activity-log",
+  "version": "0.0.0",
+  "private": true,
+  "strapi": {
+    "kind": "plugin",
+    "name": "activity-log",
+    "displayName": "Activity Log"
+  }
+}
+```
+
+`strapi-server.js`:
+
+```js
+'use strict';
+
+module.exports = require('../../../dist/src/plugins/activity-log/server/src').default;
+```
+
+`strapi-admin.js`:
+
+```js
+export { default } from './admin/src';
+```
+
+`server/src/index.ts` — punkt wejścia serwera, uzupełnisz go w kolejnych krokach:
+
+```ts
+import register from './register';
+import contentTypes from './content-types';
+import services from './services';
+import controllers from './controllers';
+import routes from './routes';
+
+export default { register, contentTypes, services, controllers, routes };
+```
+
+> Ścieżka w `strapi-server.js` prowadzi do `dist/` — `strapi start` bez wcześniejszego `npm run build`
+> nie znajdzie skompilowanego serwera pluginu.
 
 ### Krok 2 — Content Type: activity-log
 
@@ -105,6 +158,11 @@ Utwórz `server/src/services/activity-log.ts` z dwiema metodami:
 Używaj `strapi.documents('plugin::activity-log.activity-log')` i zarejestruj serwis
 w `server/src/services/index.ts` pod nazwą `activityLog`.
 
+> **Typy kolekcji pluginu:** `strapi.documents('plugin::activity-log.activity-log')` jest typowane na podstawie
+> `types/generated/contentTypes.d.ts`. Ten plik generuje sam `npm run develop` przy każdym starcie —
+> zacommituj go razem z kodem, bo `npm run build` typów nie generuje. Dzięki temu pole `action` ma typ `'create' | 'update' | 'delete' | 'publish'` z enumeracji w schemacie —
+> parametr `log(action, …)` otypuj tak samo.
+
 ### Krok 4 — Kontroler i trasa admin
 
 `server/src/controllers/activity-log.ts`:
@@ -121,6 +179,8 @@ const activityLog = ({ strapi }: { strapi: Core.Strapi }) => ({
 
 export default activityLog;
 ```
+
+`server/src/controllers/index.ts` eksportuje go pod nazwą `activityLog` (tak jak serwis).
 
 `server/src/routes/admin/index.ts` — trasy pluginu dostają prefiks z nazwą pluginu,
 więc `path: '/logs'` daje `GET /activity-log/logs`:
@@ -139,7 +199,11 @@ export default () => ({
 });
 ```
 
+`server/src/routes/index.ts`: `export default { admin: adminRoutes };` (import z `./admin`).
+
 ### Krok 5 — Document Service middleware w `register.ts`
+
+`server/src/register.ts` eksportuje funkcję `({ strapi }) => { … }`, a w niej:
 
 ```ts
 strapi.documents.use(async (context, next) => {
@@ -158,7 +222,30 @@ strapi.documents.use(async (context, next) => {
 
 ### Krok 6 — Admin UI
 
-Generator utworzył już `admin/src/index.ts` z `app.addMenuLink(...)` — ustaw `defaultMessage: 'Activity Log'`.
+`admin/src/index.ts` rejestruje plugin i dodaje pozycję w menu:
+
+```ts
+import type { StrapiApp } from '@strapi/strapi/admin';
+import { PuzzlePiece } from '@strapi/icons';
+
+const plugin: StrapiApp['appPlugins'][string] = {
+  register(app) {
+    app.addMenuLink({
+      to: 'plugins/activity-log',
+      icon: PuzzlePiece,
+      intlLabel: { id: 'activity-log.plugin.name', defaultMessage: 'Activity Log' },
+      Component: () => import('./pages/App'),
+      permissions: [],
+    });
+    app.registerPlugin({ id: 'activity-log', name: 'activity-log' });
+  },
+};
+
+export default plugin;
+```
+
+`admin/src/pages/App.tsx` renderuje `HomePage` w `<Routes>` z `react-router-dom`
+(`<Route index element={<HomePage />} />`).
 
 W `admin/src/pages/HomePage.tsx` pobierz dane hookiem `useFetchClient` z `@strapi/strapi/admin`
 i wyświetl je w tabeli (`Table`, `Thead`, `Tbody`, `Tr`, `Th`, `Td` z `@strapi/design-system`):
@@ -173,13 +260,7 @@ useEffect(() => {
 
 > Pakiet `@strapi/helper-plugin` z v4 nie istnieje w Strapi 5.
 
-### Krok 7 — Zbuduj plugin i zarejestruj go
-
-```bash
-cd src/plugins/activity-log
-npm install
-npm run build          # albo `npm run watch` podczas pracy
-```
+### Krok 7 — Zarejestruj plugin i uruchom
 
 `config/plugins.ts` w katalogu `starter/`:
 
@@ -192,7 +273,8 @@ export default {
 };
 ```
 
-Potem w katalogu `starter/`: `npm run build` i `npm run develop`.
+Potem w katalogu `starter/`: `npm run develop` — plugin skompiluje się razem z aplikacją,
+a Strapi wygeneruje typy dla jego kolekcji.
 
 ## Kryteria akceptacji
 
@@ -206,12 +288,16 @@ Potem w katalogu `starter/`: `npm run build` i `npm run develop`.
 
 - Plugin rejestruje swój Content Type jako `plugin::activity-log.activity-log` (nie `api::`)
 - Middleware rejestruj w `register()` — tak wymaga dokumentacja Document Service middlewares
-- Po każdej zmianie w kodzie pluginu: `npm run build` w pluginie (albo działające `npm run watch`)
+- `npm run develop` sam kompiluje zmiany w `server/src` pluginu i restartuje Strapi
+- Błąd TS `"plugin::activity-log.activity-log" is not assignable to parameter of type 'ContentType'` —
+  typy nie są wygenerowane — uruchom raz `npm run develop` (dopiero potem `npm run build`)
+- Błąd `Cannot find module '…/dist/src/plugins/activity-log/server/src'` — `tsconfig.json` nadal wyklucza
+  `src/plugins/**` albo projekt nie był jeszcze skompilowany (`npm run develop`)
 - Jeśli zmiany w admin UI nie są widoczne — przebuduj panel: `npm run build` w `starter/`
 
 ## Dodatkowe zasoby
 
-- [Tworzenie pluginu — oficjalny generator](https://docs.strapi.io/cms/plugins-development/create-a-plugin)
+- [Plugin SDK — budowanie pluginów do publikacji](https://docs.strapi.io/cms/plugins-development/create-a-plugin)
 - [Plugin API — serwer](https://docs.strapi.io/cms/plugins-development/server-api)
 - [Plugin API — admin](https://docs.strapi.io/cms/plugins-development/admin-panel-api)
 - [useFetchClient](https://docs.strapi.io/cms/plugins-development/admin-panel-api#usefetchclient)
