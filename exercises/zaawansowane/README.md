@@ -4,10 +4,12 @@
 
 ```bash
 cd starter
-cp .env.example .env    # bez pliku .env Strapi nie wystartuje
 npm install
 npm run develop
 ```
+
+> Przy pierwszym uruchomieniu skrypt `scripts/setup-env.js` tworzy plik `.env` z `.env.example`
+> i generuje losowe sekrety — bez `.env` Strapi nie wystartuje.
 
 Po uruchomieniu otwórz panel admina pod adresem `http://localhost:1337/admin`
 i utwórz konto administratora.

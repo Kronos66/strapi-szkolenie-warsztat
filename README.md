@@ -52,10 +52,12 @@ Pracujemy na projekcie startowym:
 
 ```bash
 cd starter
-cp .env.example .env    # bez pliku .env Strapi nie wystartuje
 npm install
 npm run develop
 ```
+
+> Przy pierwszym uruchomieniu skrypt `scripts/setup-env.js` tworzy plik `.env` z `.env.example`
+> i generuje losowe sekrety — bez `.env` Strapi nie wystartuje.
 
 Szczegóły: [exercises/zaawansowane/README.md](./exercises/zaawansowane/README.md).
 
