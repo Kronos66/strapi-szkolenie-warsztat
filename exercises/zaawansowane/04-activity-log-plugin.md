@@ -32,7 +32,7 @@ src/plugins/activity-log/
 │   │   └── activity-log/schema.json     ← definicja kolekcji logów
 │   ├── services/activity-log.ts         ← log() i getRecent()
 │   ├── controllers/activity-log.ts      ← getLogs()
-│   └── routes/admin/index.ts            ← trasa admin GET /activity-log/logs
+│   └── routes/admin/index.ts            ← route admina GET /activity-log/logs
 └── admin/src/
     ├── index.ts                         ← rejestracja w menu admina
     └── pages/HomePage.tsx               ← strona z tabelą logów
@@ -48,7 +48,7 @@ npx @strapi/sdk-plugin@latest init src/plugins/activity-log
 ```
 
 Kreator zapyta m.in. o TypeScript (`tak`) oraz czy plugin ma część admin i server (`tak` dla obu).
-Usuń przykładowy kontroler, serwis i trasę `content-api` — zastąpisz je własnymi.
+Usuń przykładowy kontroler, serwis i route `content-api` — zastąpisz je własnymi.
 
 > W `package.json` pluginu skrypty `test:ts:front` / `test:ts:back` uruchamiają `tsc` bez `--noEmit`
 > i zostawiają pliki `.js` obok `.ts`, co psuje build. Dopisz `--noEmit` albo ich nie uruchamiaj.
@@ -105,7 +105,7 @@ Utwórz `server/src/services/activity-log.ts` z dwiema metodami:
 Używaj `strapi.documents('plugin::activity-log.activity-log')` i zarejestruj serwis
 w `server/src/services/index.ts` pod nazwą `activityLog`.
 
-### Krok 4 — Kontroler i trasa admin
+### Krok 4 — Kontroler i routing admina
 
 `server/src/controllers/activity-log.ts`:
 
@@ -122,7 +122,7 @@ const activityLog = ({ strapi }: { strapi: Core.Strapi }) => ({
 export default activityLog;
 ```
 
-`server/src/routes/admin/index.ts` — trasy pluginu dostają prefiks z nazwą pluginu,
+`server/src/routes/admin/index.ts` — routing pluginu dostaje prefiks z nazwą pluginu,
 więc `path: '/logs'` daje `GET /activity-log/logs`:
 
 ```ts

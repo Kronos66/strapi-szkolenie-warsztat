@@ -18,7 +18,7 @@ i utwórz konto administratora.
 
 | # | Ćwiczenie | Temat |
 |---|-----------|-------|
-| 01 | [Search Endpoint](./01-search-endpoint.md) | Kontroler · Serwis · Trasy |
+| 01 | [Search Endpoint](./01-search-endpoint.md) | Kontroler · Serwis · Routing |
 | 02 | [Policy: is-owner](./02-policy-is-owner.md) | Polityki autoryzacji |
 | 03 | [DS Middleware](./03-ds-middleware.md) | Document Service Middleware |
 | 04 | [Activity Log Plugin](./04-activity-log-plugin.md) | Tworzenie pluginu z admin UI |

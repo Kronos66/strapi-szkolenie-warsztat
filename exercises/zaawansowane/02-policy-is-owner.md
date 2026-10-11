@@ -12,7 +12,7 @@ Nieautoryzowane próby powinny zwracać `403 Forbidden`.
 ```
 src/api/article/
 ├── policies/is-owner.ts     ← utwórz nowy plik
-└── routes/01-custom-article.ts ← dodaj trasę DELETE z polityką
+└── routes/01-custom-article.ts ← dodaj route DELETE z polityką
 ```
 
 ## Kroki
@@ -41,10 +41,10 @@ Importuj błędy z `@strapi/utils`:
 import { errors } from '@strapi/utils';
 ```
 
-### Krok 2 — Zarejestruj politykę w trasie
+### Krok 2 — Zarejestruj politykę w routingu
 
 W pliku `src/api/article/routes/01-custom-article.ts` (z ćwiczenia 01 lub nowy plik)
-dodaj trasę `DELETE`:
+dodaj route `DELETE`:
 
 ```ts
 {
@@ -58,7 +58,7 @@ dodaj trasę `DELETE`:
 ```
 
 **Uwaga:** Jeśli jeszcze nie masz pliku `01-custom-article.ts`, utwórz go.
-Jeśli już istnieje z ćwiczenia 01 — dodaj tylko nową trasę do tablicy `routes`.
+Jeśli już istnieje z ćwiczenia 01 — dodaj tylko nowy route do tablicy `routes`.
 
 ## Kryteria akceptacji
 
@@ -74,7 +74,7 @@ Jeśli już istnieje z ćwiczenia 01 — dodaj tylko nową trasę do tablicy `ro
 
 ## Wskazówki
 
-- Nazwa polityki w konfiguracji trasy to `api::article.is-owner`, gdzie:
+- Nazwa polityki w konfiguracji route'a to `api::article.is-owner`, gdzie:
   - `api::article` — namespace API
   - `is-owner` — nazwa pliku w `policies/`
 - `policyContext.params.id` to `documentId` artykułu (nie numeryczne `id` z bazy)

@@ -98,7 +98,7 @@ Authorization: Bearer <token>
 - Middleware modyfikuje `context.params.data` **przed** `next()`. Po `next()` dane są już w bazie.
 - Zawsze `return next()` lub `return result` — pominięcie przerywa łańcuch i zwraca `undefined`.
 - Sprawdź w debuggerze `console.log(context.action, context.uid)` żeby zobaczyć jakie akcje przechodzą przez middleware.
-- Middleware jest rejestrowany w `register()`, nie `bootstrap()` — `register()` działa przed załadowaniem tras i serwisów.
+- Middleware jest rejestrowany w `register()`, nie `bootstrap()` — `register()` działa przed załadowaniem routingu i serwisów.
 
 ## Dodatkowe zasoby
 
