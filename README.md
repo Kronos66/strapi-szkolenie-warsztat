@@ -63,7 +63,7 @@ Szczegóły: [exercises/zaawansowane/README.md](./exercises/zaawansowane/README.
 
 | # | Ćwiczenie | Temat |
 |---|-----------|-------|
-| 01 | [Search Endpoint](./exercises/zaawansowane/01-search-endpoint.md) | Kontroler · Serwis · Trasy |
+| 01 | [Search Endpoint](./exercises/zaawansowane/01-search-endpoint.md) | Kontroler · Serwis · Routing |
 | 02 | [Policy: is-owner](./exercises/zaawansowane/02-policy-is-owner.md) | Polityki autoryzacji |
 | 03 | [DS Middleware](./exercises/zaawansowane/03-ds-middleware.md) | Document Service middleware |
 | 04 | [Activity Log Plugin](./exercises/zaawansowane/04-activity-log-plugin.md) | Plugin z admin UI |

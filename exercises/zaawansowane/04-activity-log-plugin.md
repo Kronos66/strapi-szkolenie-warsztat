@@ -41,7 +41,7 @@ src/plugins/activity-log/
 │   │   └── activity-log/schema.json     ← definicja kolekcji logów
 │   ├── services/activity-log.ts         ← log() i getRecent()
 │   ├── controllers/activity-log.ts      ← getLogs()
-│   └── routes/admin/index.ts            ← trasa admin GET /activity-log/logs
+│   └── routes/admin/index.ts            ← route admina GET /activity-log/logs
 └── admin/src/
     ├── index.ts                         ← rejestracja w menu admina
     └── pages/
@@ -163,7 +163,7 @@ w `server/src/services/index.ts` pod nazwą `activityLog`.
 > zacommituj go razem z kodem, bo `npm run build` typów nie generuje. Dzięki temu pole `action` ma typ `'create' | 'update' | 'delete' | 'publish'` z enumeracji w schemacie —
 > parametr `log(action, …)` otypuj tak samo.
 
-### Krok 4 — Kontroler i trasa admin
+### Krok 4 — Kontroler i routing admina
 
 `server/src/controllers/activity-log.ts`:
 
@@ -182,7 +182,7 @@ export default activityLog;
 
 `server/src/controllers/index.ts` eksportuje go pod nazwą `activityLog` (tak jak serwis).
 
-`server/src/routes/admin/index.ts` — trasy pluginu dostają prefiks z nazwą pluginu,
+`server/src/routes/admin/index.ts` — routing pluginu dostaje prefiks z nazwą pluginu,
 więc `path: '/logs'` daje `GET /activity-log/logs`:
 
 ```ts

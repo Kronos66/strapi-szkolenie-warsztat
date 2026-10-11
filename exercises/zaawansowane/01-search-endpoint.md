@@ -16,7 +16,7 @@ Zbuduj endpoint `GET /api/articles/search?q=<fraza>`, który:
 src/api/article/
 ├── services/article.ts      ← dodaj metodę search()
 ├── controllers/article.ts   ← dodaj akcję search()
-└── routes/01-custom-article.ts ← utwórz nowy plik z trasą
+└── routes/01-custom-article.ts ← utwórz nowy plik z routingiem
 ```
 
 ## Kroki
@@ -50,13 +50,13 @@ Logika:
 3. Wywołaj `strapi.service('api::article.article').search(q, locale)`
 4. Zwróć `ctx.send({ data: results, meta: { total: results.length, query: q } })`
 
-### Krok 3 — Trasa
+### Krok 3 — Routing
 
 Utwórz plik `src/api/article/routes/01-custom-article.ts`:
 
-> **Dlaczego prefiks `01-`?** Strapi ładuje pliki tras alfabetycznie. Bez prefiksu plik załadowałby
+> **Dlaczego prefiks `01-`?** Strapi ładuje pliki z routingiem alfabetycznie. Bez prefiksu plik załadowałby
 > się
-> po `article.ts`, a `GET /articles/search` trafiłby w trasę `GET /articles/:id` (findOne) z id =
+> po `article.ts`, a `GET /articles/search` trafiłby w route `GET /articles/:id` (findOne) z id =
 > `search`.
 
 ```ts
