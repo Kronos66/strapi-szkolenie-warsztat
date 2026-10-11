@@ -29,7 +29,8 @@ Polityka to funkcja z sygnaturą:
 Logika:
 1. Pobierz `user` z `policyContext.state` i `id` z `policyContext.params`
 2. Jeśli brak `user` — rzuć `errors.ForbiddenError`
-3. Pobierz artykuł przez `strapi.documents('api::article.article').findOne(id, { populate: { author: { fields: ['id'] } } })`
+3. Pobierz artykuł przez `strapi.documents('api::article.article').findOne({ documentId: id, populate: { author: { fields: ['id'] } } })`
+   — w Strapi 5 `documentId` podajesz w obiekcie parametrów; `findOne(id, {...})` z v4 zwraca `null`
 4. Jeśli brak artykułu — rzuć `errors.NotFoundError`
 5. Sprawdź: `article.author?.id === user.id` (właściciel) lub `user.role?.name === 'Editor'` (editor — użytkownik users-permissions ma jedną rolę)
 6. Jeśli żaden warunek — rzuć `errors.ForbiddenError`
