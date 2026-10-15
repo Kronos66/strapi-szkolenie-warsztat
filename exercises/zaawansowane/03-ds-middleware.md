@@ -76,7 +76,7 @@ if (data?.body) {
 ## Kryteria akceptacji
 
 1. Uruchom serwer: `npm run develop`
-2. Utwórz artykuł przez panel admina lub Postman z `title: "Mój nowy artykuł"` ale **bez** pola `slug`
+2. Utwórz artykuł przez panel administratora lub Postman z `title: "Mój nowy artykuł"` ale **bez** pola `slug`
 3. Sprawdź zapisany artykuł — `slug` powinien być automatycznie `moj-nowy-artykul`
 4. Utwórz artykuł z `body` zawierającym ~400 słów — `readTime` powinno wynosić `2`
 

@@ -39,7 +39,7 @@ Każdy uczestnik tworzy własny projekt od zera.
 
 | # | Ćwiczenie | Temat |
 |---|-----------|-------|
-| P1 | [Instalacja i panel admina](./exercises/podstawy/01-instalacja.md) | create-strapi · struktura projektu · panel admina |
+| P1 | [Instalacja i panel administratora](./exercises/podstawy/01-instalacja.md) | create-strapi · struktura projektu · panel administratora |
 | P2 | [Content Types i relacje](./exercises/podstawy/02-content-types.md) | Content-Type Builder · pola · relacje 1:1 / 1:N / N:M |
 | P3 | [REST API](./exercises/podstawy/03-rest-api.md) | Endpointy · populate · filters · sort · pagination |
 | P4 | [Uprawnienia i API Tokens](./exercises/podstawy/04-uprawnienia-i-tokeny.md) | Role Public / Authenticated · API Tokens |

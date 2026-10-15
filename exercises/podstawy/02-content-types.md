@@ -5,7 +5,7 @@
 Utwórz dwa Content Types i relację między nimi — bez SQL i bez kodu.
 
 Content Type jest jak interfejs TypeScript — definiuje kształt danych.
-Strapi sam tworzy tabelę w bazie, endpointy API i formularze w panelu admina.
+Strapi sam tworzy tabelę w bazie, endpointy API i formularze w panelu administratora.
 
 ## Kroki
 

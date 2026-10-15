@@ -279,8 +279,8 @@ a Strapi wygeneruje typy dla jego kolekcji.
 ## Kryteria akceptacji
 
 1. Strapi startuje bez błędów, w logach widać `Activity Log plugin aktywny`
-2. Utwórz, zaktualizuj i opublikuj artykuł w panelu admina
-3. W panelu admina pojawi się nowa pozycja menu **Activity Log**
+2. Utwórz, zaktualizuj i opublikuj artykuł w panelu administratora
+3. W panelu administratora pojawi się nowa pozycja menu **Activity Log**
 4. Strona Activity Log wyświetla tabelę z operacjami `create`, `update`, `publish`
 5. `GET /activity-log/logs` bez tokenu admina zwraca 401
 
