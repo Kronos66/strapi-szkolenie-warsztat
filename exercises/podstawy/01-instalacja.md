@@ -1,9 +1,9 @@
-# Ćwiczenie P1 — Instalacja i panel admina
+# Ćwiczenie P1 — Instalacja i panel administratora
 
 ## Cel
 
 Każdy ma działającą instancję Strapi, rozumie wygenerowaną strukturę projektu
-i potrafi poruszać się po panelu admina.
+i potrafi poruszać się po panelu administratora.
 
 ## Kroki
 
@@ -18,7 +18,7 @@ npm run develop
 - `--non-interactive` przyjmuje ustawienia domyślne: TypeScript i **SQLite** — nie trzeba stawiać
   bazy danych
 - `--skip-cloud` pomija logowanie do Strapi Cloud
-- Panel admina otworzy się pod `http://localhost:1337/admin` — utwórz konto administratora
+- Panel administratora otworzy się pod `http://localhost:1337/admin` — utwórz konto administratora
 
 > **Port 1337 zajęty?** Uruchom `PORT=1338 npm run develop`.
 
@@ -43,7 +43,7 @@ my-blog/
 Na co dzień większości tych plików nie dotykasz — Strapi zarządza nimi sam.
 Warto jednak wiedzieć, gdzie co leży, kiedy przyjdzie czas na customizację.
 
-### Krok 3 — Przegląd panelu admina
+### Krok 3 — Przegląd panelu administratora
 
 Przejdź po kolei przez sekcje w bocznym menu:
 
@@ -57,5 +57,5 @@ Przejdź po kolei przez sekcje w bocznym menu:
 ## Kryteria akceptacji
 
 1. `npm run develop` startuje bez błędów
-2. Jesteś zalogowany do panelu admina
+2. Jesteś zalogowany do panelu administratora
 3. Otworzyłeś każdą sekcję z menu

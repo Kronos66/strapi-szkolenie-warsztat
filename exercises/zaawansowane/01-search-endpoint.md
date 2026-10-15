@@ -6,7 +6,7 @@ Zbuduj endpoint `GET /api/articles/search?q=<fraza>`, który:
 
 - Przeszukuje artykuły po polach `title` i `body` (case-insensitive)
 - Zwraca tylko opublikowane artykuły z polami `title`, `slug`, `publishedAt`
-- Obsługuje parametr `locale` (domyślnie `pl`)
+- Obsługuje parametr `locale` (domyślnie `pl`) — filtruje dopiero po włączeniu i18n dla Article
 - Zapisuje każde wyszukiwanie do kolekcji `search-log`
 - Zwraca `400 Bad Request` gdy brak parametru `q` lub ma mniej niż 2 znaki
 
@@ -28,15 +28,16 @@ o metodę `search`, która przyjmuje `query: string` i opcjonalny `locale`.
 
 Logika:
 
-1. Jeśli `query` ma mniej niż 2 znaki — zwróć pustą tablicę
-2. Wywołaj `strapi.documents('api::article.article').findMany()` z:
+1. Wywołaj `strapi.documents('api::article.article').findMany()` z:
     - `status: 'published'`
     - `locale` przekazanym jako parametr
     - `filters: { $or: [{ title: { $containsi: query } }, { body: { $containsi: query } }] }`
     - `fields: ['title', 'slug', 'publishedAt']`
     - `sort: 'publishedAt:desc'`
-3. Zapisz wpis do `search-log` przez `strapi.documents('api::search-log.search-log').create()`
-4. Zwróć wyniki
+2. Zapisz wpis do `search-log` przez `strapi.documents('api::search-log.search-log').create()`
+3. Zwróć wyniki
+
+Walidacją `query` zajmuje się kontroler — serwis dostaje już poprawną frazę.
 
 ### Krok 2 — Kontroler: akcja `search()`
 
@@ -46,9 +47,12 @@ o akcję `search`.
 Logika:
 
 1. Pobierz `q` i `locale` z `ctx.query`
-2. Jeśli brak `q` — zwróć `ctx.badRequest('Parametr "q" jest wymagany')`
+2. Jeśli brak `q` lub ma mniej niż 2 znaki — zwróć `ctx.badRequest('Parametr "q" jest wymagany i musi mieć co najmniej 2 znaki')`
 3. Wywołaj `strapi.service('api::article.article').search(q, locale)`
-4. Zwróć `ctx.send({ data: results, meta: { total: results.length, query: q } })`
+4. Przepuść wyniki przez `this.sanitizeOutput(results, ctx)` — tak jak robią to domyślne akcje.
+   Usuwa pola prywatne i relacje, do których rola nie ma uprawnień.
+5. Zwróć `this.transformResponse(sanitized, { total: results.length, query: q })` —
+   odpowiedź ma ten sam kształt `{ data, meta }` co reszta API
 
 ### Krok 3 — Routing
 
@@ -89,10 +93,10 @@ GET http://localhost:1337/api/articles/search
 
 # Zbyt krótkie zapytanie
 GET http://localhost:1337/api/articles/search?q=a
-# → { data: [] }
+# → 400 Bad Request
 ```
 
-Sprawdź też w panelu admina, że kolekcja **Search Log** rejestruje wyszukiwania (Settings →
+Sprawdź też w panelu administratora, że kolekcja **Search Log** rejestruje wyszukiwania (Settings →
 Content-Manager lub przez API `/api/search-logs` z tokenem admina).
 
 ## Wskazówki

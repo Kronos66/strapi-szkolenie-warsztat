@@ -11,13 +11,28 @@ Nieautoryzowane próby powinny zwracać `403 Forbidden`.
 
 ```
 src/api/article/
+├── services/article.ts      ← dodaj metodę isOwner()
 ├── policies/is-owner.ts     ← utwórz nowy plik
 └── routes/01-custom-article.ts ← dodaj route DELETE z polityką
 ```
 
 ## Kroki
 
-### Krok 1 — Utwórz politykę `is-owner`
+### Krok 1 — Serwis: metoda `isOwner()`
+
+Dostęp do danych trzymamy w serwisie — polityka tylko o niego pyta.
+W `src/api/article/services/article.ts` dodaj metodę `isOwner(documentId, email)`:
+
+1. Pobierz artykuł przez `strapi.documents('api::article.article').findOne({ documentId, populate: { author: { fields: ['email'] } } })`
+   — `documentId` podajesz w obiekcie parametrów
+2. Jeśli brak artykułu — rzuć `errors.NotFoundError` (klient dostanie `404`)
+3. Zwróć `article.author?.email === email`
+
+Dlaczego e-mail, a nie `id`? W projekcie startowym autor (`api::author.author`) to osobny content type,
+niepowiązany z kontem użytkownika w `users-permissions`. Ich `id` pochodzą z dwóch różnych tabel,
+więc łączy je tylko adres e-mail.
+
+### Krok 2 — Utwórz politykę `is-owner`
 
 Utwórz plik `src/api/article/policies/is-owner.ts`.
 
@@ -29,19 +44,17 @@ Polityka to funkcja z sygnaturą:
 Logika:
 1. Pobierz `user` z `policyContext.state` i `id` z `policyContext.params`
 2. Jeśli brak `user` — rzuć `errors.ForbiddenError`
-3. Pobierz artykuł przez `strapi.documents('api::article.article').findOne({ documentId: id, populate: { author: { fields: ['id'] } } })`
-   — w Strapi 5 `documentId` podajesz w obiekcie parametrów; `findOne(id, {...})` z v4 zwraca `null`
-4. Jeśli brak artykułu — rzuć `errors.NotFoundError`
-5. Sprawdź: `article.author?.id === user.id` (właściciel) lub `user.role?.name === 'Editor'` (editor — użytkownik users-permissions ma jedną rolę)
-6. Jeśli żaden warunek — rzuć `errors.ForbiddenError`
-7. W przeciwnym razie — `return true`
+3. Jeśli `user.role?.name === 'Editor'` — `return true` (użytkownik users-permissions ma jedną rolę)
+4. Wywołaj `strapi.service('api::article.article').isOwner(id, user.email)`
+5. Jeśli nie jest właścicielem — rzuć `errors.ForbiddenError`
+6. W przeciwnym razie — `return true`
 
 Importuj błędy z `@strapi/utils`:
 ```ts
 import { errors } from '@strapi/utils';
 ```
 
-### Krok 2 — Zarejestruj politykę w routingu
+### Krok 3 — Zarejestruj politykę w routingu
 
 W pliku `src/api/article/routes/01-custom-article.ts` (z ćwiczenia 01 lub nowy plik)
 dodaj route `DELETE`:
@@ -62,15 +75,15 @@ Jeśli już istnieje z ćwiczenia 01 — dodaj tylko nowy route do tablicy `rout
 
 ## Kryteria akceptacji
 
-1. Zaloguj się w panelu admina i utwórz artykuł jako użytkownik A
-2. Zaloguj się jako użytkownik B (inny autor)
-3. Spróbuj usunąć artykuł użytkownika A przez API z tokenem użytkownika B:
+1. Utwórz dwóch użytkowników API (users-permissions), A i B, z różnymi adresami e-mail
+2. W panelu administratora utwórz autora z e-mailem użytkownika A i przypisz go do artykułu
+3. Spróbuj usunąć ten artykuł przez API z tokenem użytkownika B:
    ```bash
    DELETE http://localhost:1337/api/articles/<documentId>
    Authorization: Bearer <token-uzytkownika-B>
    # → 403 Forbidden
    ```
-4. Ta sama operacja z tokenem użytkownika A (właściciela) powinna zwrócić `200`.
+4. Ta sama operacja z tokenem użytkownika A (właściciela) powinna zwrócić `204 No Content`.
 
 ## Wskazówki
 
