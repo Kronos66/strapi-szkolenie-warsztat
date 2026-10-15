@@ -3,7 +3,7 @@
 ## Cel
 
 Zabezpiecz endpoint `DELETE /api/articles/:id` polityką `is-owner`,
-która pozwala usunąć artykuł tylko jego autorowi lub użytkownikowi z rolą `Editor`.
+która pozwala usunąć artykuł tylko jego autorowi.
 
 Nieautoryzowane próby powinny zwracać `403 Forbidden`.
 
@@ -44,10 +44,9 @@ Polityka to funkcja z sygnaturą:
 Logika:
 1. Pobierz `user` z `policyContext.state` i `id` z `policyContext.params`
 2. Jeśli brak `user` — rzuć `errors.ForbiddenError`
-3. Jeśli `user.role?.name === 'Editor'` — `return true` (użytkownik users-permissions ma jedną rolę)
-4. Wywołaj `strapi.service('api::article.article').isOwner(id, user.email)`
-5. Jeśli nie jest właścicielem — rzuć `errors.ForbiddenError`
-6. W przeciwnym razie — `return true`
+3. Wywołaj `strapi.service('api::article.article').isOwner(id, user.email)`
+4. Jeśli nie jest właścicielem — rzuć `errors.ForbiddenError`
+5. W przeciwnym razie — `return true`
 
 Importuj błędy z `@strapi/utils`:
 ```ts
@@ -91,6 +90,8 @@ Jeśli już istnieje z ćwiczenia 01 — dodaj tylko nowy route do tablicy `rout
   - `api::article` — namespace API
   - `is-owner` — nazwa pliku w `policies/`
 - `policyContext.params.id` to `documentId` artykułu (nie numeryczne `id` z bazy)
+- Rola **Authenticated** musi mieć zaznaczone `delete` dla Article (Settings → Users & Permissions → Roles).
+  Bez tego Strapi zwróci `403`, zanim polityka w ogóle się uruchomi.
 - Możesz przetestować bez drugiego użytkownika — sprawdź czy brak tokenu zwraca `403`
 - Do testowania w Postmanie potrzebujesz tokenu JWT z pluginu `users-permissions`
   (endpoint: `POST /api/auth/local`)
