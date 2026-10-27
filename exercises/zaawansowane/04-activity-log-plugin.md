@@ -61,7 +61,7 @@ W `starter/tsconfig.json` zamień w `exclude` wpis `"src/plugins/**"` (razem z k
 "src/plugins/*/admin/**"
 ```
 
-Utwórz katalog `starter/src/plugins/activity-log/` i trzy pliki:
+Utwórz katalog `starter/src/plugins/activity-log/` i cztery pliki:
 
 `package.json`:
 
