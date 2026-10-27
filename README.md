@@ -19,8 +19,8 @@ część zaawansowana — dla osób, które znają już podstawy Strapi.
 ```
 strapi-szkolenie-warsztat/
 ├── exercises/
-│   ├── podstawy/        ← P1–P6: nowy projekt od zera (create-strapi)
-│   └── zaawansowane/    ← 01–04: praca na projekcie startowym
+│   ├── podstawy/        ← P1–P6: praca na projekcie startowym
+│   └── zaawansowane/    ← 01–04: dalsza praca na tym samym projekcie
 ├── solutions/           ← tylko w gałęzi `rozwiazania`
 │   └── zaawansowane/    ← gotowe rozwiązania ćwiczeń 01–04
 ├── kolekcje-api/        ← kolekcje Postman i Bruno z zapytaniami z ćwiczenia P3
@@ -32,14 +32,33 @@ strapi-szkolenie-warsztat/
 
 - **`main`** — materiały dla uczestników: ćwiczenia, projekt startowy, kolekcje API
 - **`rozwiazania`** — to samo plus gotowe rozwiązania (`solutions/`) i notatki prowadzącego
+- **`plugin-tsc`** / **`rozwiazania-plugin-tsc`** — wariant ćwiczenia 04, w którym plugin kompiluje się razem z aplikacją (tsc projektu)
+
+## Przygotowanie projektu
+
+Obie części warsztatu robimy na jednym projekcie — `starter/`. Najlepiej przygotuj go przed warsztatem:
+
+```bash
+cd starter
+npm install
+npm run seed:example   # dane przykładowe: artykuły, autorzy, kategorie, obrazki
+npm run develop
+```
+
+> Przy pierwszym uruchomieniu skrypt `scripts/setup-env.js` tworzy plik `.env` z `.env.example`
+> i generuje losowe sekrety — bez `.env` Strapi nie wystartuje.
+
+> `seed:example` uruchom **przed** `develop` (przy zatrzymanym serwerze). Działa tylko raz —
+> żeby wgrać dane ponownie, usuń bazę `.tmp/data.db`.
+
+Po uruchomieniu otwórz panel administratora pod adresem `http://localhost:1337/admin`
+i utwórz konto administratora.
 
 ## Część podstawowa
 
-Każdy uczestnik tworzy własny projekt od zera.
-
 | # | Ćwiczenie | Temat |
 |---|-----------|-------|
-| P1 | [Instalacja i panel administratora](./exercises/podstawy/01-instalacja.md) | create-strapi · struktura projektu · panel administratora |
+| P1 | [Uruchomienie projektu i panel administratora](./exercises/podstawy/01-instalacja.md) | Projekt startowy · struktura projektu · panel administratora |
 | P2 | [Content Types i relacje](./exercises/podstawy/02-content-types.md) | Content-Type Builder · pola · relacje 1:1 / 1:N / N:M |
 | P3 | [REST API](./exercises/podstawy/03-rest-api.md) | Endpointy · populate · filters · sort · pagination |
 | P4 | [Uprawnienia i API Tokens](./exercises/podstawy/04-uprawnienia-i-tokeny.md) | Role Public / Authenticated · API Tokens |
@@ -48,16 +67,7 @@ Każdy uczestnik tworzy własny projekt od zera.
 
 ## Część zaawansowana
 
-Pracujemy na projekcie startowym:
-
-```bash
-cd starter
-npm install
-npm run develop
-```
-
-> Przy pierwszym uruchomieniu skrypt `scripts/setup-env.js` tworzy plik `.env` z `.env.example`
-> i generuje losowe sekrety — bez `.env` Strapi nie wystartuje.
+Pracujemy dalej na projekcie startowym (patrz [Przygotowanie projektu](#przygotowanie-projektu)).
 
 Szczegóły: [exercises/zaawansowane/README.md](./exercises/zaawansowane/README.md).
 
@@ -74,7 +84,7 @@ Szczegóły: [exercises/zaawansowane/README.md](./exercises/zaawansowane/README.
 |---|---|
 | **Uwierzytelnianie** | Wbudowane — `POST /api/auth/local/register` i `POST /api/auth/local` |
 | **GraphQL** | `npm install @strapi/plugin-graphql` — endpoint `/graphql` |
-| **i18n** | Wbudowane w Strapi 5 — Settings → Internationalization |
+| **i18n** | Już włączone dla Article (`pl`) — dodaj kolejny język w Settings → Internationalization i przetłumacz artykuł |
 | **Webhooks** | Settings → Webhooks — powiadamianie zewnętrznych serwisów o zmianach treści |
 | **Strapi Cloud** | Zarządzany hosting — `npm run deploy` |
 

@@ -5,14 +5,14 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/api/articles?populate=author&filters[title][$containsi]=blog&sort=publishedAt:desc&pagination[pageSize]=3
+  url: {{baseUrl}}/api/articles?populate=author&filters[title][$containsi]=internet&sort=publishedAt:desc&pagination[pageSize]=3
   body: none
   auth: none
 }
 
 params:query {
   populate: author
-  filters[title][$containsi]: blog
+  filters[title][$containsi]: internet
   sort: publishedAt:desc
   pagination[pageSize]: 3
 }

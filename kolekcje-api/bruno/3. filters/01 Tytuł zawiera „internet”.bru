@@ -1,17 +1,17 @@
 meta {
-  name: Tytuł zawiera „strapi”
+  name: Tytuł zawiera „internet”
   type: http
   seq: 1
 }
 
 get {
-  url: {{baseUrl}}/api/articles?filters[title][$containsi]=strapi
+  url: {{baseUrl}}/api/articles?filters[title][$containsi]=internet
   body: none
   auth: none
 }
 
 params:query {
-  filters[title][$containsi]: strapi
+  filters[title][$containsi]: internet
 }
 
 tests {

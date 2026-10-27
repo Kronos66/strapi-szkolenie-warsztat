@@ -53,7 +53,8 @@ src/plugins/activity-log/
 
 ### Krok 1 — Szkielet pluginu
 
-W `starter/tsconfig.json` zamień w `exclude` wpis `"src/plugins/**"` na:
+W `starter/tsconfig.json` zamień w `exclude` wpis `"src/plugins/**"` (razem z komentarzem
+`// Do not include plugins in the server compilation` nad nim) na:
 
 ```jsonc
 // Panel admina pluginów buduje Vite (strapi-admin.js), serwer pluginów kompiluje tsc projektu
@@ -152,7 +153,7 @@ export default {
 ### Krok 3 — Serwis
 
 Utwórz `server/src/services/activity-log.ts` z dwiema metodami:
-- `log(action, contentType, documentId, user?)` — tworzy wpis w kolekcji (`targetDocumentId: documentId`)
+- `log(action, contentType, documentId, user = 'system')` — tworzy wpis w kolekcji (`targetDocumentId: documentId`)
 - `getRecent(limit = 50)` — pobiera ostatnie logi: `sort: 'createdAt:desc'`, `limit`
 
 Używaj `strapi.documents('plugin::activity-log.activity-log')` i zarejestruj serwis
@@ -218,7 +219,12 @@ strapi.documents.use(async (context, next) => {
   }
   return result;
 });
+
+strapi.log.info('Activity Log plugin aktywny');
 ```
+
+Ostatnia linia wypisuje komunikat przy starcie Strapi — po nim poznasz, że plugin się załadował
+(kryterium akceptacji nr 1).
 
 ### Krok 6 — Admin UI
 
@@ -262,7 +268,8 @@ useEffect(() => {
 
 ### Krok 7 — Zarejestruj plugin i uruchom
 
-`config/plugins.ts` w katalogu `starter/`:
+Zastąp zawartość `config/plugins.ts` w katalogu `starter/` (albo dopisz klucz `'activity-log'`
+do obiektu zwracanego przez istniejącą funkcję `({ env }) => ({})`):
 
 ```ts
 export default {
@@ -281,7 +288,8 @@ a Strapi wygeneruje typy dla jego kolekcji.
 1. Strapi startuje bez błędów, w logach widać `Activity Log plugin aktywny`
 2. Utwórz, zaktualizuj i opublikuj artykuł w panelu administratora
 3. W panelu administratora pojawi się nowa pozycja menu **Activity Log**
-4. Strona Activity Log wyświetla tabelę z operacjami `create`, `update`, `publish`
+4. Strona Activity Log wyświetla tabelę z operacjami `create`, `update`, `publish` (kliknięcie **Publish**
+   w panelu zapisuje też `update` — to normalne)
 5. `GET /activity-log/logs` bez tokenu admina zwraca 401
 
 ## Wskazówki
@@ -293,7 +301,8 @@ a Strapi wygeneruje typy dla jego kolekcji.
   typy nie są wygenerowane — uruchom raz `npm run develop` (dopiero potem `npm run build`)
 - Błąd `Cannot find module '…/dist/src/plugins/activity-log/server/src'` — `tsconfig.json` nadal wyklucza
   `src/plugins/**` albo projekt nie był jeszcze skompilowany (`npm run develop`)
-- Jeśli zmiany w admin UI nie są widoczne — przebuduj panel: `npm run build` w `starter/`
+- Jeśli zmiany w admin UI nie są widoczne — odśwież stronę albo zrestartuj `npm run develop`
+  (panel buduje Vite). `npm run build` w `starter/` jest potrzebny tylko przed `npm run start`
 
 ## Dodatkowe zasoby
 

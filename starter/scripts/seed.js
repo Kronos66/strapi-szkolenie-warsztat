@@ -35,31 +35,6 @@ async function isFirstRun() {
   return !initHasRun;
 }
 
-async function setPublicPermissions(newPermissions) {
-  // Find the ID of the public role
-  const publicRole = await strapi.query('plugin::users-permissions.role').findOne({
-    where: {
-      type: 'public',
-    },
-  });
-
-  // Create the new permissions and link them to the public role
-  const allPermissionsToCreate = [];
-  Object.keys(newPermissions).map((controller) => {
-    const actions = newPermissions[controller];
-    const permissionsToCreate = actions.map((action) => {
-      return strapi.query('plugin::users-permissions.permission').create({
-        data: {
-          action: `api::${controller}.${controller}.${action}`,
-          role: publicRole.id,
-        },
-      });
-    });
-    allPermissionsToCreate.push(...permissionsToCreate);
-  });
-  await Promise.all(allPermissionsToCreate);
-}
-
 function getFileSizeInBytes(filePath) {
   const stats = fs.statSync(filePath);
   const fileSizeInBytes = stats['size'];
@@ -101,8 +76,10 @@ async function uploadFile(file, name) {
 async function createEntry({ model, entry }) {
   try {
     // Actually create the entry in Strapi
+    // Strapi 5 ignoruje publishedAt w data — publikuje tylko status: 'published'
     await strapi.documents(`api::${model}.${model}`).create({
       data: entry,
+      status: 'published',
     });
   } catch (error) {
     console.error({ model, entry, error });
@@ -237,14 +214,7 @@ async function importAuthors() {
 }
 
 async function importSeedData() {
-  // Allow read of application content types
-  await setPublicPermissions({
-    article: ['find', 'findOne'],
-    category: ['find', 'findOne'],
-    author: ['find', 'findOne'],
-    global: ['find', 'findOne'],
-    about: ['find', 'findOne'],
-  });
+  // Uprawnień roli Public celowo nie ustawiamy — uczestnicy włączają je sami w ćwiczeniach P3 i P4
 
   // Create all entries
   await importCategories();
