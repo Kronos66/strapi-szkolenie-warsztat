@@ -85,6 +85,7 @@ Szczegóły: [exercises/zaawansowane/README.md](./exercises/zaawansowane/README.
 | **GraphQL** | `npm install @strapi/plugin-graphql` — endpoint `/graphql` |
 | **i18n** | Już włączone dla Article (`pl`) — dodaj kolejny język w Settings → Internationalization i przetłumacz artykuł |
 | **Webhooks** | Settings → Webhooks — powiadamianie zewnętrznych serwisów o zmianach treści |
+| **MCP** | Już włączony w starterze — endpoint `/mcp` dla agentów AI (Claude Code, Cursor…), szczegóły w [części zaawansowanej](./exercises/zaawansowane/README.md#bonus--serwer-mcp) |
 | **Strapi Cloud** | Zarządzany hosting — `npm run deploy` |
 
 ## Zasoby
