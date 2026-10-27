@@ -10,24 +10,48 @@
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {},
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "description": {
       "type": "text",
-      "maxLength": 80
+      "maxLength": 80,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "slug": {
       "type": "uid",
-      "targetField": "title"
+      "targetField": "title",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "cover": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "files", "videos"]
+      "allowedTypes": ["images", "files", "videos"],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "author": {
       "type": "relation",
@@ -43,17 +67,37 @@
     },
     "blocks": {
       "type": "dynamiczone",
-      "components": ["shared.media", "shared.quote", "shared.rich-text", "shared.slider"]
+      "components": ["shared.media", "shared.quote", "shared.rich-text", "shared.slider"],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "body": {
-      "type": "text"
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "featured": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "readTime": {
-      "type": "integer"
+      "type": "integer",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

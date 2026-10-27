@@ -80,17 +80,45 @@ if (data?.body) {
 3. Sprawdź zapisany artykuł — `slug` powinien być automatycznie `moj-nowy-artykul`
 4. Utwórz artykuł z `body` zawierającym ~400 słów — `readTime` powinno wynosić `2`
 
-```bash
-POST http://localhost:1337/api/articles
-Content-Type: application/json
-Authorization: Bearer <token>
+Rola **Public** może tylko czytać artykuły, więc do `POST` potrzebujesz API tokenu:
+**Settings → API Tokens → Create new API Token**, typ **Full access** (albo **Custom** z zaznaczonym
+`create` i `update` dla Article).
 
+> **Slug musi być unikalny.** To pole UID — każde kolejne testowe zapytanie wysyłaj z innym `title`
+> (np. dopisz numer: `Mój nowy artykuł 2`), inaczej dostaniesz `400 This attribute must be unique`.
+
+> **`POST /api/articles` od razu publikuje wpis** (odpowiedź ma `publishedAt`), więc testowy artykuł
+> trafi też do wyszukiwarki z ćwiczenia 01. Jeśli chcesz utworzyć tylko szkic, dodaj `?status=draft`
+> do adresu.
+
+JSON nie potrafi powtórzyć tekstu 400 razy, więc treść wygeneruj. W Postmanie / Bruno ustaw body
+na `raw` JSON:
+
+```json
 {
   "data": {
-    "title": "Testowy artykuł bez sluga",
-    "body": "Słowo ".repeat(400)
+    "title": "Testowy artykuł bez sluga 1",
+    "body": "{{longBody}}"
   }
 }
+```
+
+i dodaj skrypt **pre-request**, który tworzy zmienną `longBody`:
+
+```js
+// Postman
+pm.variables.set('longBody', 'Lorem ipsum dolor sit amet. '.repeat(80).trim());
+// Bruno
+bru.setVar('longBody', 'Lorem ipsum dolor sit amet. '.repeat(80).trim());
+```
+
+Albo z terminala (Node generuje body):
+
+```bash
+curl -X POST http://localhost:1337/api/articles \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <api-token>" \
+  -d "$(node -e 'console.log(JSON.stringify({ data: { title: "Testowy artykuł bez sluga 2", body: "Lorem ipsum dolor sit amet. ".repeat(80).trim() } }))')"
 ```
 
 ## Wskazówki
@@ -98,6 +126,8 @@ Authorization: Bearer <token>
 - Middleware modyfikuje `context.params.data` **przed** `next()`. Po `next()` dane są już w bazie.
 - Zawsze `return next()` lub `return result` — pominięcie przerywa łańcuch i zwraca `undefined`.
 - Sprawdź w debuggerze `console.log(context.action, context.uid)` żeby zobaczyć jakie akcje przechodzą przez middleware.
+- Przy `update` middleware wygeneruje nowy slug, gdy wyślesz `title` bez `slug` — zmieni się adres
+  opublikowanego artykułu. W produkcji generuj slug tylko przy `create` albo gdy slug w bazie jest pusty.
 - Middleware jest rejestrowany w `register()`, nie `bootstrap()` — `register()` działa przed załadowaniem routingu i serwisów.
 
 ## Dodatkowe zasoby

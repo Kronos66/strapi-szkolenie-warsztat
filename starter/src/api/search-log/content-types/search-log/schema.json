@@ -19,7 +19,7 @@
     "resultsCount": {
       "type": "integer"
     },
-    "locale": {
+    "searchLocale": {
       "type": "string"
     }
   }

@@ -19,7 +19,7 @@ kolekcje-api/
 |---|---|---|
 | `baseUrl` | `http://localhost:1337` | Adres Strapi |
 | `documentId` | — | Ustawiana automatycznie przez zapytanie „Lista artykułów” |
-| `authorName` | `Jan Kowalski` | Imię autora do zadania z filtrem — zmień na swojego |
+| `authorName` | `David Doe` | Autor z danych przykładowych — do zadania z filtrem po relacji |
 
 W Postmanie zmienne są w zakładce **Variables** kolekcji, w Bruno w środowisku `local`.
 
@@ -33,8 +33,9 @@ W Postmanie zmienne są w zakładce **Variables** kolekcji, w Bruno w środowisk
 6. **Wszystko razem**
 
 Każde zapytanie ma test sprawdzający oczekiwany status, więc całą kolekcję można puścić jednym
-kliknięciem (Postman: **Run collection**, Bruno: **Run**). Przed uruchomieniem zrób kroki z P2
-i krok 2 z P3: opublikowane artykuły z autorami oraz `find` / `findOne` dla Article i Author w roli Public.
+kliknięciem (Postman: **Run collection**, Bruno: **Run**). Przed uruchomieniem potrzebujesz
+uruchomionego startera z danymi przykładowymi (`npm run seed:example`) i kroku 2 z P3:
+`find` / `findOne` dla Article, Author i Category w roli Public.
 
 Z linii poleceń:
 

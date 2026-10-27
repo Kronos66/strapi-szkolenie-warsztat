@@ -47,8 +47,25 @@ cd starter
 npx @strapi/sdk-plugin@latest init src/plugins/activity-log
 ```
 
-Kreator zapyta m.in. o TypeScript (`tak`) oraz czy plugin ma część admin i server (`tak` dla obu).
-Usuń przykładowy kontroler, serwis i route `content-api` — zastąpisz je własnymi.
+Kreator zada kilkanaście pytań — na wszystkie możesz odpowiedzieć Enterem (wartości domyślne pasują).
+Sprawdź tylko te:
+
+| Pytanie | Odpowiedź |
+|---------|-----------|
+| `plugin display name` | `Activity Log` |
+| `register with the admin panel?` | **Y** |
+| `register with the server?` | **Y** |
+| `Use TypeScript?` (ostatnie) | **Y** |
+
+Kreator sam wykona `npm install` i pierwszy build (1–2 min).
+
+> **Wersja Strapi w pluginie:** generator wpisuje do `package.json` pluginu najnowsze `@strapi/strapi`
+> (np. `^5.59.0`), a starter ma `5.57.0`. Plugin działa, ale możesz zmienić wersję na `5.57.0`.
+
+Usuń przykładowe pliki `server/src/controllers/controller.ts`, `server/src/services/service.ts`
+i katalog `server/src/routes/content-api/`, a potem usuń ich importy z `controllers/index.ts`,
+`services/index.ts` i `routes/index.ts` (w nim zostaw tylko `admin: adminAPIRoutes`) — inaczej build
+się nie powiedzie. W krokach 3–4 zarejestrujesz tam własne `activityLog`.
 
 > W `package.json` pluginu skrypty `test:ts:front` / `test:ts:back` uruchamiają `tsc` bez `--noEmit`
 > i zostawiają pliki `.js` obok `.ts`, co psuje build. Dopisz `--noEmit` albo ich nie uruchamiaj.
@@ -99,7 +116,9 @@ export default {
 ### Krok 3 — Serwis
 
 Utwórz `server/src/services/activity-log.ts` z dwiema metodami:
-- `log(action, contentType, documentId, user?)` — tworzy wpis w kolekcji (`targetDocumentId: documentId`)
+- `log(action, contentType, documentId, user = 'system')` — tworzy wpis w kolekcji
+  (`targetDocumentId: documentId`); middleware z kroku 5 nie przekazuje użytkownika, więc w kolumnie
+  `user` zobaczysz `system`
 - `getRecent(limit = 50)` — pobiera ostatnie logi: `sort: 'createdAt:desc'`, `limit`
 
 Używaj `strapi.documents('plugin::activity-log.activity-log')` i zarejestruj serwis
@@ -154,7 +173,12 @@ strapi.documents.use(async (context, next) => {
   }
   return result;
 });
+
+strapi.log.info('Activity Log plugin aktywny');
 ```
+
+Ostatnia linia wypisuje komunikat przy starcie Strapi — po nim poznasz, że plugin się załadował
+(kryterium akceptacji nr 1).
 
 ### Krok 6 — Admin UI
 
@@ -177,11 +201,14 @@ useEffect(() => {
 
 ```bash
 cd src/plugins/activity-log
-npm install
 npm run build          # albo `npm run watch` podczas pracy
 ```
 
-`config/plugins.ts` w katalogu `starter/`:
+> Generator zainstalował już zależności. `npm install` w pluginie jest potrzebny tylko wtedy, gdy
+> kopiujesz gotowe rozwiązanie z gałęzi `rozwiazania`.
+
+Zastąp zawartość `config/plugins.ts` w katalogu `starter/` (albo dopisz klucz `'activity-log'`
+do obiektu zwracanego przez istniejącą funkcję `({ env }) => ({})`):
 
 ```ts
 export default {
@@ -192,14 +219,17 @@ export default {
 };
 ```
 
-Potem w katalogu `starter/`: `npm run build` i `npm run develop`.
+Potem w katalogu `starter/` zrestartuj `npm run develop` (Ctrl+C i uruchom ponownie). W trybie develop
+panel jest serwowany przez Vite, więc `npm run build` startera nie jest potrzebny — tylko do
+`npm run start` (tryb produkcyjny).
 
 ## Kryteria akceptacji
 
 1. Strapi startuje bez błędów, w logach widać `Activity Log plugin aktywny`
 2. Utwórz, zaktualizuj i opublikuj artykuł w panelu administratora
 3. W panelu administratora pojawi się nowa pozycja menu **Activity Log**
-4. Strona Activity Log wyświetla tabelę z operacjami `create`, `update`, `publish`
+4. Strona Activity Log wyświetla tabelę z operacjami `create`, `update`, `publish` (kliknięcie
+   **Publish** w panelu zapisuje też `update` — to normalne, panel zapisuje szkic przed publikacją)
 5. `GET /activity-log/logs` bez tokenu admina zwraca 401
 
 ## Wskazówki
@@ -207,7 +237,8 @@ Potem w katalogu `starter/`: `npm run build` i `npm run develop`.
 - Plugin rejestruje swój Content Type jako `plugin::activity-log.activity-log` (nie `api::`)
 - Middleware rejestruj w `register()` — tak wymaga dokumentacja Document Service middlewares
 - Po każdej zmianie w kodzie pluginu: `npm run build` w pluginie (albo działające `npm run watch`)
-- Jeśli zmiany w admin UI nie są widoczne — przebuduj panel: `npm run build` w `starter/`
+- Jeśli zmiany w admin UI nie są widoczne — przebuduj plugin (`npm run build` w pluginie) i zrestartuj
+  `npm run develop` w `starter/`
 
 ## Dodatkowe zasoby
 

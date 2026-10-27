@@ -302,7 +302,7 @@
       "name": "3. filters",
       "item": [
         {
-          "name": "Tytuł zawiera „strapi”",
+          "name": "Tytuł zawiera „internet”",
           "event": [
             {
               "listen": "test",
@@ -318,7 +318,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/articles?filters[title][$containsi]=strapi",
+              "raw": "{{baseUrl}}/api/articles?filters[title][$containsi]=internet",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -329,7 +329,7 @@
               "query": [
                 {
                   "key": "filters[title][$containsi]",
-                  "value": "strapi"
+                  "value": "internet"
                 }
               ]
             },
@@ -407,7 +407,7 @@
                 }
               ]
             },
-            "description": "Filtr po polu relacji. Ustaw zmienną `authorName` na imię jednego z Twoich autorów."
+            "description": "Filtr po polu relacji. Zmienna `authorName` ma domyślnie „David Doe” (autor z danych przykładowych) — zapytanie zwraca 2 artykuły."
           }
         }
       ]
@@ -553,7 +553,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/articles?populate=author&filters[title][$containsi]=blog&sort=publishedAt:desc&pagination[pageSize]=3",
+              "raw": "{{baseUrl}}/api/articles?populate=author&filters[title][$containsi]=internet&sort=publishedAt:desc&pagination[pageSize]=3",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -568,7 +568,7 @@
                 },
                 {
                   "key": "filters[title][$containsi]",
-                  "value": "blog"
+                  "value": "internet"
                 },
                 {
                   "key": "sort",
@@ -596,7 +596,7 @@
     },
     {
       "key": "authorName",
-      "value": "Jan Kowalski"
+      "value": "David Doe"
     }
   ]
 }
