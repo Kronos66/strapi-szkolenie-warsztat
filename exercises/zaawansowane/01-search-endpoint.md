@@ -136,6 +136,9 @@ albo JWT użytkowników z `users-permissions`.
   kontrolerze.
 - Jeśli `search-log` nie rejestruje wpisów — sprawdź czy `draftAndPublish: false` w jego schemacie.
 
+> **Po warsztacie:** rozwinięcie tego ćwiczenia znajdziesz w [zadaniach domowych](./05-zadania-domowe.md):
+> Z1 (limit zapytań) i Z2 (sprzątanie logów przez cron).
+
 ## Dodatkowe zasoby
 
 - [Document Service API — findMany](https://docs.strapi.io/cms/api/document-service/find-many)

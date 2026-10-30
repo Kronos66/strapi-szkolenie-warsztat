@@ -240,6 +240,9 @@ panel jest serwowany przez Vite, więc `npm run build` startera nie jest potrzeb
 - Jeśli zmiany w admin UI nie są widoczne — przebuduj plugin (`npm run build` w pluginie) i zrestartuj
   `npm run develop` w `starter/`
 
+> **Po warsztacie:** rozwinięcie tego ćwiczenia znajdziesz w [zadaniach domowych](./05-zadania-domowe.md):
+> Z5 (prawdziwy użytkownik, RBAC) i Z6 (panel boczny w Content Managerze).
+
 ## Dodatkowe zasoby
 
 - [Tworzenie pluginu — oficjalny generator](https://docs.strapi.io/cms/plugins-development/create-a-plugin)

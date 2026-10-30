@@ -116,6 +116,9 @@ Jeśli już istnieje z ćwiczenia 01 — dodaj tylko nowy route do tablicy `rout
   użytkownika)
 - Ponowny `DELETE` tego samego artykułu zwraca `404` — to `NotFoundError` z metody `isOwner()`
 
+> **Po warsztacie:** rozwinięcie tego ćwiczenia znajdziesz w [zadaniach domowych](./05-zadania-domowe.md):
+> Z3 (właściciel jako relacja z kontem i luka w rozpoznawaniu po e-mailu).
+
 ## Dodatkowe zasoby
 
 - [Polityki — dokumentacja](https://docs.strapi.io/cms/backend-customization/policies)

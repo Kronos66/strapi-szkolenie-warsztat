@@ -76,6 +76,7 @@ Szczegóły: [exercises/zaawansowane/README.md](./exercises/zaawansowane/README.
 | 02 | [Policy: is-owner](./exercises/zaawansowane/02-policy-is-owner.md) | Polityki autoryzacji |
 | 03 | [DS Middleware](./exercises/zaawansowane/03-ds-middleware.md) | Document Service middleware |
 | 04 | [Activity Log Plugin](./exercises/zaawansowane/04-activity-log-plugin.md) | Plugin z admin UI |
+| 05 | [Zadania domowe i ciekawostki](./exercises/zaawansowane/05-zadania-domowe.md) | Rozszerzenia 01–04 dla chętnych |
 
 ## Co dalej
 

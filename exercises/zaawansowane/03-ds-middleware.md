@@ -130,6 +130,9 @@ curl -X POST http://localhost:1337/api/articles \
   opublikowanego artykułu. W produkcji generuj slug tylko przy `create` albo gdy slug w bazie jest pusty.
 - Middleware jest rejestrowany w `register()`, nie `bootstrap()` — `register()` działa przed załadowaniem routingu i serwisów.
 
+> **Po warsztacie:** rozwinięcie tego ćwiczenia znajdziesz w [zadaniach domowych](./05-zadania-domowe.md):
+> Z4 (unikalny slug tylko przy `create`).
+
 ## Dodatkowe zasoby
 
 - [Document Service Middleware](https://docs.strapi.io/cms/backend-customization/document-service-middlewares)
