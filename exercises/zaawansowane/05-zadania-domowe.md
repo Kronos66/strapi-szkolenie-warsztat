@@ -76,12 +76,9 @@ minuta”.
 
 ## Z3: Właściciel jako relacja z kontem
 
-> **Ciekawostka.** W ćwiczeniu 02 właściciela rozpoznajemy po e-mailu. Rejestracja w
-> users-permissions
-> jest otwarta, a potwierdzanie adresu e-mail jest domyślnie wyłączone. Kto zna e-mail autora i
-> założy
-> konto pierwszy, może usuwać jego artykuły. Polityka chroni też tylko `DELETE`, a `PUT` może
-> wywołać
+> **Ciekawostka.** W ćwiczeniu 02 właściciela rozpoznajemy po e-mailu. Rejestracja w users-permissions
+> jest otwarta, a potwierdzanie adresu e-mail jest domyślnie wyłączone. Kto zna e-mail autora i założy
+> konto pierwszy, może usuwać jego artykuły. Polityka chroni też tylko `DELETE`, a `PUT` może wywołać
 > każdy zalogowany użytkownik z uprawnieniem `update`.
 
 **Zadanie:**
@@ -91,17 +88,32 @@ minuta”.
 2. Nadpisz akcję `create` w kontrolerze Article tak, żeby `owner` zawsze był zalogowanym
    użytkownikiem (`ctx.state.user`). Klient nie może sam ustawić ani zmienić właściciela.
    Pamiętaj, że `sanitizeInput` usuwa relacje, do których rola nie ma uprawnień, więc właściciela
-   ustaw
-   po sanitizacji, po stronie serwera.
+   ustaw po sanitizacji, po stronie serwera.
 3. Zmień `isOwner()`, żeby porównywał `owner.id` z `user.id` zamiast e-maili.
 4. Dodaj w `01-custom-article.ts` route `PUT /articles/:id` z tą samą polityką. Zmień komunikat
    polityki na neutralny („Nie masz uprawnień do tego artykułu”).
-5. Opcjonalnie: włącz potwierdzanie e-maila: Settings → Users & Permissions Plugin → **Advanced
-   settings**
-   → **Enable email confirmation**.
+5. Opcjonalnie: włącz potwierdzanie e-maila: Settings → Users & Permissions Plugin →
+   **Advanced settings** → **Enable email confirmation**.
+
+> **API tokeny.** Zapytanie z API tokenem nie ma użytkownika (`ctx.state.user` jest pusty). Bez
+> dodatkowego warunku polityka zwróci `403` na każdy `PUT` z tokenem, także w testach z ćwiczenia 03,
+> a `create` utworzy artykuł bez właściciela. API token to zaufany klient serwerowy, więc przepuść go
+> na początku polityki:
+>
+> ```ts
+> const { user, auth } = policyContext.state;
+>
+> if (auth?.strategy?.name === 'content-api-token') {
+>   return true;
+> }
+> ```
+>
+> W Strapi 5.57 strategia nazywa się `content-api-token`. We wcześniejszych wersjach 5.x nazywała się
+> `api-token`. Jeśli warunek nie działa, wypisz `auth.strategy.name` w logu.
 
 **Sprawdź:** użytkownik B dostaje `403` na `PUT` i `DELETE` artykułu użytkownika A. `POST`
-z `"owner": <id-B>` w body użytkownika A tworzy artykuł z właścicielem A.
+z `"owner": <id-B>` w body użytkownika A tworzy artykuł z właścicielem A. `PUT` z API tokenem
+zwraca `200`.
 
 **Dokumentacja:** [Controllers: sanitization](https://docs.strapi.io/cms/backend-customization/controllers#sanitization-and-validation-in-controllers),
 [Policies](https://docs.strapi.io/cms/backend-customization/policies)
